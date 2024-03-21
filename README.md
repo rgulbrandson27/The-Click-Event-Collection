@@ -1,6 +1,5 @@
 # The-Click-Event-Collection
-Can't remember where you watched that explanation you actually understood?  
+Can't remember where you watched that video explanation you actually understood?  
 Hopefully you remembered to save it HERE!
 
-[Click Event Collection Draft 2.pdf](https://github.com/rgulbrandson27/The-Click-Event-Collection/files/14597793/Click.Event.Collection.Draft.2.pdf)
-
+<img width="1147" alt="Click Event Collection ERD Draft #3" src="https://github.com/rgulbrandson27/The-Click-Event-Collection/assets/105253984/0efdbb51-f03d-46cd-9a16-82160b8471b2">
