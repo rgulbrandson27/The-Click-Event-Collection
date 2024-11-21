@@ -12,8 +12,8 @@
         "startTime:": "0:00",
         "endTime": "7:11",
         "topics": ["Java", "Linked List", "Linked List Methods"],
-        "numberInWatched": 1,
-        "numberInQueue": 1
+        "numberInQueue": 1,
+        "isWatched": true
     },
     {
         "id": 2,
@@ -28,8 +28,8 @@
         "startTime:": "0:00",
         "endTime": "11:17",
         "topics": ["JavaScript", "React", "React Hooks", "useRef"],
-        "numberInWatched": 1,
-        "numberInQueue": 1
+        "numberInQueue": 1,
+        "isWatched": true
     },
     {
         "id": 3,
@@ -44,8 +44,8 @@
         "startTime:": "0:00",
         "endTime": "38:16",
         "topics": ["Tailwind", "Tailwind CSS", "Flexbox"],
-        "numberInWatched": 1,
-        "numberInQueue": 1
+        "numberInQueue": 1,
+        "isWatched": true
     }, 
     {
         "id": 4,
@@ -60,8 +60,8 @@
         "startTime:": "0:00",
         "endTime": "14:44",
         "topics": ["ERD", "Entity Relationship Diagram"],
-        "numberInWatched": 1,
-        "numberInQueue": 1
+        "numberInQueue": 1,
+        "isWatched": true
     },
     {
         "id": 5,
@@ -76,8 +76,8 @@
         "startTime:": "0:00",
         "endTime": "28:34",
         "topics": ["Data", "Normalization"],
-        "numberInWatched": 1,
-        "numberInQueue": 1
+        "numberInQueue": 1,
+        "isWatched": true
     },
     {
         "id": 6,
@@ -92,8 +92,8 @@
         "startTime:": "1:01",
         "endTime": "15:38",
         "topics": ["Http Requests", "API", "Fetch", "Get", "Post"],
-        "numberInWatched": 1,
-        "numberInQueue": 1
+        "numberInQueue": 1,
+        "isWatched": true
     },
       {
         "id": 7,
@@ -108,8 +108,8 @@
         "startTime:": "0:00",
         "endTime": "30:01",
         "topics": ["JSON", "JSON Server", "Data Storage"],
-        "numberInWatched": 1,
-        "numberInQueue": 1
+        "numberInQueue": 1,
+        "isWatched": true
     },
       {
         "id": 8,
@@ -124,8 +124,8 @@
         "startTime:": "59:35",
         "endTime": "01:09:50",
         "topics": ["Linked List", "Data Structures", "Algorithms", "Reverse Linked List"],
-        "numberInWatched": 1,   
-        "numberInQueue": 1
+        "numberInQueue": 1,
+        "isWatched": true
     },
       {
         "id": 9,
@@ -140,8 +140,8 @@
         "startTime:": "0:00",
         "endTime": "17:48",
         "topics": ["Java", "Getters", "Setters"],
-        "numberInWatched": 1,
-        "numberInQueue": 1
+        "numberInQueue": 1,
+        "isWatched": true
     },
       {
         "id": 10,
@@ -157,7 +157,8 @@
         "endTime": "20:30",
         "topics": ["NTier", "N-Tier", "N Tier", "Architecture", "Unit Testing", "Integration Testing", "Design"],
         "numberInWatched": 1,
-        "numberInQueue": 1
+        "numberInQueue": 1,
+        "isWatched": true
     }
 
 ]
