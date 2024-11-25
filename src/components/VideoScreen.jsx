@@ -2,10 +2,15 @@ import React, { useEffect, useState } from "react";
 // import "./VideoBar.css";
 // import { Pi } from "react-icons/pi";
 
-const VideoScreen = {
+const VideoScreen = () => {
 
-// ({
-//   videoTitle,
+  return (
+    <div className="bg-blue-300 h-full w-full">
+    
+    </div>
+)
+}
+export default VideoScreen;
 //   videoTopicList,
 //   videoLink,
 //   videoThumbnail,
@@ -63,7 +68,7 @@ const VideoScreen = {
 // );
 
 
-}
+
   /* events: 
 
 onMouseEnter={(e) => set...(true)}
@@ -71,4 +76,4 @@ onMouseLeave={(e) => set....(false)}
 onClick={(e) => set....(true)}   */
 
 
-export default VideoScreen;
+
