@@ -1,16 +1,45 @@
 import React, { useEffect, useState } from "react";
+import YouTube from 'react-youtube';
 // import "./VideoBar.css";
 // import { Pi } from "react-icons/pi";
 
-const VideoScreen = () => {
+
+const YouTubeVideo = ( {videoId} ) => {
+
+  // const videoId = 'TJcHyfzkXf4';
+// ({ videoId }) => {
+  const opts = {
+
+    width: '100%',
+    
+    playerVars: {
+      autoplay: 1, // Set to 1 to autoplay the video
+    },
+  };
+
+  const onReady = (event) => {
+    event.target.pauseVideo(); // Pause the video when it's ready
+  };
 
   return (
-    <div className="bg-blue-300 h-full w-full">
-    
+    <div className="youtube-container rounded-md overflow-hidden">
+      <YouTube videoId={videoId} opts={opts} onReady={onReady} />
     </div>
-)
-}
-export default VideoScreen;
+  )
+};
+
+export default YouTubeVideo;
+
+
+// const VideoScreen = () => {
+
+//   return (
+//     <div className="bg-blue-300 h-full w-full">
+    
+//     </div>
+// )
+// }
+// export default VideoScreen;
 //   videoTopicList,
 //   videoLink,
 //   videoThumbnail,
