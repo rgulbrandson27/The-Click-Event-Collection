@@ -15,7 +15,7 @@ const url = "https://663eca0fe3a7c3218a4b60b3.mockapi.io/videoTutorials";
 const App = () => {
 
   const [videos, setVideos] = useState([])
-  // const [displayAddVideoForm, setDisplayAddVideoForm] = useState(false);sx 
+  // const [displayAddVideoForm, setDisplayAddVideoForm] = useState(false);
   const [displayVideoLibrary, setDisplayVideoLibrary] = useState(false);
   // const [currentVideo, setCurrentVideo] = useState("");
     // const [windowSize, setWindowSize] = useState(window.innerWidth);
@@ -53,7 +53,6 @@ const App = () => {
         console.log("Fetched videos:", data);
         setVideos(data);
         // setCurrentUser(data.find(user => user.id === "1") || null);
-  
         // console.log(data.find(user => user.id === "1")); 
         // Logs the user with id 1 or null
       } catch (error) {
@@ -74,13 +73,13 @@ const handleShowLibrary = () => {
     <>
     {displayVideoLibrary ? (
 
-      <div className="bg-gray-600 h-screen w-screen">
-          <VideoLibrary />  
+      <div className="bg-gray-600 h-full w-full">
+          <VideoLibrary videos={videos}/>  
       </div>      
     ) : (
 
-    <div className="p-2 h-screen w-screen bg-gray-800 sm:bg-gray-600 md:bg-gray-400 lg:bg-gray-600 xl:bg-gray-800 2xl:bg-gray-400
-    lg:grid-cols-3">
+    <div className="p-2 min-h-screen w-screen bg-gray-800 flex overflow-hidden">
+     {/* sm:bg-gray-600 md:bg-gray-400 lg:bg-gray-600 xl:bg-gray-800 2xl:bg-gray-400 */}
 
 {/*****2xl*****2xl*****2xl*****2xl*****2xl*****2xl*****/}
       {tailwindSize === "2xl"  ?  (
@@ -93,13 +92,15 @@ const handleShowLibrary = () => {
               <SearchBar handleShowLibrary={handleShowLibrary} />
             </div> 
 
-            <div className="flex w-2/3 ml-6 mt-10">
-                <VideoContainer videoId = {videoId} />
-            </div>
+            <div className="flex w-full mt-12">
+              <div className="w-2/3 ml-12 mr-12">
+                  <VideoContainer videoId = {videoId} />
+              </div>
 
-            {/* <div className="">
-            <QueueSection />
-            </div> */}
+              <div className="w-1/3 mr-14 ml-10">
+                <QueueSection />
+              </div>
+            </div>
         </div>
       )
 /*****xl*****xl*****xl*****xl*****xl*****xl*****/
@@ -113,13 +114,15 @@ const handleShowLibrary = () => {
               <SearchBar handleShowLibrary={handleShowLibrary}/>
             </div> 
 
-            <div className="flex w-2/3 ml-6 mt-10">
-                <VideoContainer videoId = {videoId} />
-            </div>
+            <div className="flex w-full mt-12">
+              <div className="w-2/3 ml-10 mr-8 p-10">
+                  <VideoContainer videoId = {videoId} />
+              </div>
 
-            {/* <div className="">
-            <QueueSection />
-            </div> */}
+              <div className="w-1/3 mr-14 ml-0 overflow-y-scroll">
+                <QueueSection />
+              </div>
+            </div>
         </div>
         )
 /*****lg*****lg*****lg*****lg*****lg*****lg*****/
@@ -133,14 +136,15 @@ const handleShowLibrary = () => {
             <SearchBar handleShowLibrary={handleShowLibrary} />
             </div> 
 
-            
-            <div className="flex w-2/3 ml-6 mt-8">
-                <VideoContainer videoId = {videoId} />
+            <div className="flex w-full mt-12">
+              <div className="w-2/3 ml-8 mr-16">
+                  <VideoContainer videoId = {videoId} />
+              </div>
+
+              <div className="w-1/3 mr-10 ml-2">
+                <QueueSection />
+              </div>
             </div>
-{/* 
-            <div className="">
-            <QueueSection />
-            </div> */}
         </div> 
         )
 /*****md*****md*****md*****md*****md*****md*****/
@@ -154,13 +158,13 @@ const handleShowLibrary = () => {
             <SearchBar handleShowLibrary={handleShowLibrary} />
             </div> 
 
-            <div className="flex justify-center mx-10 mt-8">
+            <div className="flex justify-center mx-20 mt-8">
                 <VideoContainer videoId = {videoId} />
             </div>
-{/* 
-            <div className="">
+
+            <div className="mt-6 mx-40 mb-4">
             <QueueSection />
-            </div> */}
+            </div>
         </div>
         )
 /*****sm*****sm*****sm*****sm*****sm*****sm*****/
@@ -174,18 +178,18 @@ const handleShowLibrary = () => {
             <SearchBar handleShowLibrary={handleShowLibrary}/>
             </div> 
 
-            <div className="flex justify-center mx-2 mt-8">
+            <div className="flex justify-center mx-12 mt-8">
                 <VideoContainer videoId = {videoId} />
             </div>
 
-            {/* <div className="">
+            <div className="mt-6 mx-32 mb-4">
             <QueueSection />
-            </div> */}
+            </div>
         </div>
 /*****XS*****XS*****XS*****XS*****XS*****XS*****/
       ) : (
         <div>
-            <div className="flex justify-center relative mx-28 mt-3">
+            <div className="flex justify-center relative mx-28 mt-4 mb-8">
                 <Title />
             </div>
       
@@ -193,14 +197,13 @@ const handleShowLibrary = () => {
                 <SearchBar handleShowLibrary={handleShowLibrary}/>
             </div> 
 
-            <div className="flex justify-center mx-2 mt-10">
+            <div className="flex justify-center">
                 <VideoContainer videoId = {videoId} />
             </div>
       
-            
-            {/* <div className="">
+            <div className="px-14 mt-8 mb-2">
             <QueueSection />
-            </div> */}
+            </div>
         </div>
         )}
       </div>

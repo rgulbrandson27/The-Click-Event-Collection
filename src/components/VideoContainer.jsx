@@ -4,7 +4,6 @@ import React, { useState, useEffect } from 'react';
 import YouTubeVideo from './YouTubeVideo'
 
 const VideoContainer = ( {videoId}
-    
 ) => {
         
     // const [videos, setVideos] = useState = (videos)
@@ -14,12 +13,14 @@ const VideoContainer = ( {videoId}
     // }
 
     return (
-        <div  className="bg-gray-600 w-full aspect-video rounded-md p-4">
+        <div  className="bg-gray-600 w-full aspect-video rounded-md flex justify-center items-center px-[16px] py-[9px]">
+            <div className='bg-gray-600 w-full h-full'>
             <YouTubeVideo videoId={videoId} />
+            {/* <div className="bg-red-200 w-full h-full"></div> */}
+        </div>
         </div>
     )
 }    
-
 export default VideoContainer;
   
 

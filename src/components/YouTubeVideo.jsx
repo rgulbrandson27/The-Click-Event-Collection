@@ -11,20 +11,26 @@ const YouTubeVideo = ( {videoId} ) => {
   const opts = {
 
     width: '100%',
-    
+    height: '100%',
+
+
     playerVars: {
-      autoplay: 1, // Set to 1 to autoplay the video
+      autoplay: 0, // override default
+      rel: 0, //override default - set here to not show related videos
+      
     },
   };
 
   const onReady = (event) => {
     event.target.pauseVideo(); // Pause the video when it's ready
   };
-
+ 
   return (
-    <div className="youtube-container rounded-md overflow-hidden">
-      <YouTube videoId={videoId} opts={opts} onReady={onReady} />
-    </div>
+    // <div className="youtube-container rounded-md aspect-video overflow-hidden">
+    // <div className="rounded-md flex w-full h-full overflow-hidden">
+      // <div className="w-full h-full bg-yellow-400">
+      <YouTube videoId={videoId} opts={opts} onReady={onReady} className="aspect-video rounded-md overflow-hidden"/>
+    // </div>
   )
 };
 

@@ -59,7 +59,7 @@
         "isClip": false,
         "startTime:": "0:00",
         "endTime": "14:44",
-        "topics": ["ERD", "Entity Relationship Diagram"],
+        "topics": ["ERD", "Entity Relationship Diagram", "Back-End"],
         "numberInQueue": 1,
         "isWatched": true
     },
@@ -75,7 +75,7 @@
         "isClip": false,
         "startTime:": "0:00",
         "endTime": "28:34",
-        "topics": ["Data", "Normalization"],
+        "topics": ["Data", "Database", "Normalization"],
         "numberInQueue": 1,
         "isWatched": true
     },
@@ -155,7 +155,7 @@
         "isClip": false,
         "startTime:": "0:00",
         "endTime": "20:30",
-        "topics": ["NTier", "N-Tier", "N Tier", "Architecture", "Unit Testing", "Integration Testing", "Design"],
+        "topics": ["Back-End", "Data", "Database", "NTier", "N-Tier", "N Tier", "Architecture", "Unit Testing", "Integration Testing", "Design"],
         "numberInWatched": 1,
         "numberInQueue": 1,
         "isWatched": true

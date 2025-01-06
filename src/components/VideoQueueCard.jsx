@@ -7,13 +7,16 @@ const VideoQueueCard = () => {
     const thumbnailUrl = `https://img.youtube.com/vi/${videoId}/maxresdefault.jpg`;
 
   return (
-        <div className="relative w-3/4 h-1/2 bg-gray-200 rounded-lg overflow-hidden"> 
+        <div className="relative rounded-lg overflow-hidden flex"> 
+            
             <img
               src={thumbnailUrl} 
               alt="YouTube Thumbnail"
-              className="w-full h-full object-cover"
+              className="w-1/3 h-1/3 object-cover py-2 ml-56"
             />
-         <div className="absolute inset-0 flex justify-center items-center bg-black bg-opacity-50">
+         
+          <div className="absolute inset-0 flex justify-end items-center">
+          <div className="text-3xl text-red-800 justify-end mr-4">x</div>
          {/* <svg
           xmlns="http://www.w3.org/2000/svg"
           fill="none"

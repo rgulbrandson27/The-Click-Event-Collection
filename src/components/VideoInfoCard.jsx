@@ -1,23 +1,56 @@
 
 import React, { useState, useEffect } from 'react'
 
-
-
-const VideoInfoCard = ( {videos} ) => {
+const VideoInfoCard = ( {
+    videoName,
+    videoLink,
+    videoThumbnail, 
+    channelName,
+    channelAddress, 
+    creatorName, 
+    isSeries, 
+    isClick, 
+    startTime, 
+    endTime, 
+    topics,
+    numberInQueue,
+    dateProduced,
+    isWatched 
+    } ) => {
 
     return (
       <>
-        <div className="bg-red-400 h-full w-full">
-            <p>{ }</p>
+        <div className="bg-gray-200 aspect-video w-full flex flex-col border border-t-4 border-t-blue-600 shadow-sm rounded-xl">
+
+            <div class="p-4 md:p-5">
+                <h3 class="text-lg font-bold text-gray-800 dark:text-white">{videoName} </h3>
+                <p class="mt-2 text-gray-500 dark:text-neutral-400">With supporting text below as a natural lead-in to additional content.</p>
+                <p className="LINK text-blue-500">
+                        <a href={videoLink} target="_blank">link</a>
+                </p>
+                <a class="mt-3 inline-flex items-center gap-x-1 text-sm font-semibold rounded-lg border border-transparent
+                 text-blue-600 decoration-2 hover:text-blue-700 hover:underline focus:underline focus:outline-none focus:text-blue-700 
+                 disabled:opacity-50 disabled:pointer-events-none dark:text-blue-500 dark:hover:text-blue-600 dark:focus:text-blue-600" href="#">Card link
+                    <svg class="shrink-0 size-4" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="m9 18 6-6-6-6"></path>
+                    </svg>
+                </a>
+            </div>
+
         </div>
       </>
     )
   }
+//   <div class="max-w-xs flex flex-col bg-white border border-t-4 border-t-blue-600 shadow-sm rounded-xl dark:bg-neutral-900 dark:border-neutral-700 dark:border-t-blue-500 dark:shadow-neutral-700/70">
+
+// </div>
   export default VideoInfoCard;
   
 
 
-        {/* <div class="max-w-2xl px-8 py-4 bg-white rounded-lg shadow-md dark:bg-gray-800">
+        {/* 
+            sample tailwind card component
+            <div class="max-w-2xl px-8 py-4 bg-white rounded-lg shadow-md dark:bg-gray-800">
     <div class="flex items-center justify-between">
         <span class="text-sm font-light text-gray-600 dark:text-gray-400">Mar 10, 2019</span>
         <a class="px-3 py-1 text-sm font-bold text-gray-100 transition-colors duration-300 transform bg-gray-600 rounded cursor-pointer hover:bg-gray-500" tabindex="0" role="button">Design</a>
