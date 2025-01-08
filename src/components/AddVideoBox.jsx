@@ -10,10 +10,8 @@ return  (
             <p className="text-7xl my-3 sm:text-5xl sm:mt-0 sm:mb-1 md:mt-6 md:mb-4 lg:mt-8 lg:mb-2" >+</p>
             <p className="text-5xl sm:text-3xl md:text-4xl">New Tutorial</p>
         </div>
-
     )
 }    
-    
 export default AddVideoBox;
   
 

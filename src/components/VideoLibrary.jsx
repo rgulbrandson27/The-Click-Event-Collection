@@ -3,11 +3,11 @@ import AddVideoBox from './AddVideoBox';
 import VideoInfoCard from './VideoInfoCard';
 import AddVideoForm from './AddVideoForm';
 
-const VideoLibrary = ( {videos} ) => {
+const VideoLibrary = ( {videos, displayVideoLibrary, setDisplayVideoLibrary} ) => {
   
     // const [videos, setVideos] = useState = ('')
-    // const [updatedVideoList, setUpdatedVideoList] = ('')
-    // const [displayAddVideoForm, setDisplayAddVideoForm] = useState(true);
+    const [updatedVideoList, setUpdatedVideoList] = ('')
+    const [displayAddVideoForm, setDisplayAddVideoForm] = useState(false);
 
     return  (
 
@@ -20,9 +20,13 @@ const VideoLibrary = ( {videos} ) => {
             gap-6 px-8 sm:px-4"> */}
 
                 {/* <DisplayAddVideoForm &&  */}
-                <div className="px-10">
-                    <AddVideoForm />
+            <div className="w-full flex justify-center">
+                {/* <div className="px-10 sm:px-20 md:px-44 lg:px-80 xl:px-0 xl:w-1/3"> */}
+                <div className="w-5/6 sm:w-2/3 md:w-1/2 lg:px-10 xl:px-24 xl:1/3">
+
+                    <AddVideoForm setDisplayAddVideoForm={setDisplayAddVideoForm} displayVideoLibrary={displayVideoLibrary} setDisplayVideoLibrary={setDisplayVideoLibrary}/>
                 </div>
+            </div>
                 {/* <AddVideoBox />    */}
        
                 {/* {videos.map((video) => (

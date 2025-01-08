@@ -7,6 +7,7 @@ import QueueSection from './components/QueueSection';
 import VideoContainer from './components/VideoContainer';
 import VideoLibrary from './components/VideoLibrary';
 
+
 // import background from '../assets/background.png'
 
 
@@ -73,12 +74,12 @@ const handleShowLibrary = () => {
     <>
     {displayVideoLibrary ? (
 
-      <div className="bg-gray-600 h-full w-full">
-          <VideoLibrary videos={videos}/>  
+      <div className="bg-gray-600 h-screen w-full">
+          <VideoLibrary videos={videos} displayVideoLibrary={displayVideoLibrary} setDisplayVideoLibrary={displayVideoLibrary} url={url}/>  
       </div>      
     ) : (
 
-    <div className="p-2 min-h-screen w-screen bg-gray-800 flex overflow-hidden">
+    <div className="p-2 h-screen w-screen bg-gray-800 flex">
      {/* sm:bg-gray-600 md:bg-gray-400 lg:bg-gray-600 xl:bg-gray-800 2xl:bg-gray-400 */}
 
 {/*****2xl*****2xl*****2xl*****2xl*****2xl*****2xl*****/}
@@ -115,11 +116,11 @@ const handleShowLibrary = () => {
             </div> 
 
             <div className="flex w-full mt-12">
-              <div className="w-2/3 ml-10 mr-8 p-10">
+              <div className="w-2/3 ml-6 mr-8">
                   <VideoContainer videoId = {videoId} />
               </div>
 
-              <div className="w-1/3 mr-14 ml-0 overflow-y-scroll">
+              <div className="w-1/3 mr-10 ml-0 overflow-y-scroll">
                 <QueueSection />
               </div>
             </div>
