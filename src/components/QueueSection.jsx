@@ -1,11 +1,34 @@
 import React, { useState, useEffect } from 'react'
 import VideoCard from './VideoQueueCard';
+// import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 
 
 
 
-const QueueSection = () => {
-  
+
+const QueueSection = ( {videos}) => {
+  const [queue, setQueue] = useState([]);
+
+  // useEffect(() => {
+  //   // Initialize the queue based on the library videos (filtering by queue numbers)
+  //   const initialQueue = videos.filter((video) =>
+  //     [1, 2, 3, 4, 5].includes(video.queue)
+  //   );
+  //   setQueue(initialQueue);
+  // }, [videos]);
+
+  // Handle drag-and-drop
+  const handleOnDragEnd = (result) => {
+    if (!result.destination) return;
+
+    const items = Array.from(queue);
+    const [reorderedItem] = items.splice(result.source.index, 1);
+    items.splice(result.destination.index, 0, reorderedItem);
+
+    setQueue(items);
+  };
+
+
   return (
 <div className="">
 

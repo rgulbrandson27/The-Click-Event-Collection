@@ -16,14 +16,9 @@ const url = "https://663eca0fe3a7c3218a4b60b3.mockapi.io/videoTutorials";
 const App = () => {
 
   const [videos, setVideos] = useState([])
-  // const [displayAddVideoForm, setDisplayAddVideoForm] = useState(false);
-  const [displayVideoLibrary, setDisplayVideoLibrary] = useState(false);
-  // const [currentVideo, setCurrentVideo] = useState("");
-    // const [windowSize, setWindowSize] = useState(window.innerWidth);
+  const [displayVideoLibrary, setDisplayVideoLibrary] = useState();
   const [tailwindSize, setTailwindSize] = useState('');
-
   const windowSize = useWindowSize();
-
   const videoId = "TJcHyfzkXf4"
 
   useEffect(() => {
@@ -34,7 +29,6 @@ const App = () => {
     }
   }, [windowSize]);
 
-
   const determineTailwindSize = (size) => {
       if (size.width >= 1536) return "2xl";
       if (size.width >= 1280) return "xl";
@@ -44,27 +38,29 @@ const App = () => {
       return "xs";
   };
   
- 
-  useEffect(() => {
-    const fetchVideos = async () => {
-      try {
-        const response = await fetch(url);
-        const data = await response.json();
+
   
-        console.log("Fetched videos:", data);
-        setVideos(data);
-        // setCurrentUser(data.find(user => user.id === "1") || null);
-        // console.log(data.find(user => user.id === "1")); 
-        // Logs the user with id 1 or null
-      } catch (error) {
-        console.error("Error fetching video data:", error);
-      }
-    };
-    fetchVideos();
-  }, []);         
+ 
+  // useEffect(() => {
+  //   const fetchVideos = async () => {
+  //     try {
+  //       const response = await fetch(url);
+  //       const data = await response.json();
+  
+  //       console.log("Fetched videos:", data);
+  //       setVideos(data);
+  //       // setCurrentUser(data.find(user => user.id === "1") || null);
+  //       // console.log(data.find(user => user.id === "1")); 
+  //       // Logs the user with id 1 or null
+  //     } catch (error) {
+  //       console.error("Error fetching video data:", error);
+  //     }
+  //   };
+  //   fetchVideos();
+  // }, []);         
 
 
-console.log("Tailwind Size: ", tailwindSize);
+// console.log("Tailwind Size: ", tailwindSize);
 
 const handleShowLibrary = () => {
     setDisplayVideoLibrary(true)
@@ -75,7 +71,7 @@ const handleShowLibrary = () => {
     {displayVideoLibrary ? (
 
       <div className="bg-gray-600 h-screen w-full">
-          <VideoLibrary videos={videos} displayVideoLibrary={displayVideoLibrary} setDisplayVideoLibrary={displayVideoLibrary} url={url}/>  
+          <VideoLibrary videos={videos} setVideos={setVideos} displayVideoLibrary={displayVideoLibrary} setDisplayVideoLibrary={setDisplayVideoLibrary} url={url}/>  
       </div>      
     ) : (
 
