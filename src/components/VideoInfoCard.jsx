@@ -12,20 +12,22 @@ const VideoInfoCard = ( {
     isClick, 
     startTime, 
     endTime, 
-    topics,
+    category,
+    keywords,
     numberInQueue,
     dateProduced,
-    isWatched 
+    isWatched,
+    applyCategoryColor
     } ) => {
 
     return (
       <>
-        <div className="bg-gray-200 aspect-video w-full flex flex-col border border-t-4 border-t-blue-600 shadow-sm rounded-xl">
+        <div className={`bg-gray-200 aspect-video w-full flex flex-col border border-t-4 border-t-${applyCategoryColor(category)} shadow-sm rounded-xl`}>
 
             <div className="p-4 md:p-5">
                 <h3 className="text-xl font-bold text-gray-800 dark:text-white">{videoTitle} </h3>
                 <p className="mt-2 text-gray-500 dark:text-neutral-400">With supporting text below as a natural lead-in to additional content.</p>
-                <p className="LINK text-blue-500">
+                <p className="LINK text-pink-500">
                         <a href={videoLink} target="_blank">link</a>
                 </p>
                 <a className="mt-3 inline-flex items-center gap-x-1 text-sm font-semibold rounded-lg border border-transparent

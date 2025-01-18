@@ -38,7 +38,20 @@ const App = () => {
       return "xs";
   };
   
-
+  const applyCategoryColor = (category) => {
+      const colorKey = {
+          React: "cyan-600",
+          Data: "blue-600", 
+          Java: "orange-500",
+          JavaScript: "amber-400",
+          Tailwind: "teal-400",
+          AI: "pink-500",
+          DS: "violet-600",
+          FE: "fuchsia-500",
+          BE: "emerald-600",
+      };
+      return colorKey[category] || "gray-400"; // Default
+  };
   
  
   // useEffect(() => {
@@ -71,11 +84,12 @@ const handleShowLibrary = () => {
     {displayVideoLibrary ? (
 
       <div className="bg-gray-600 h-screen w-full">
-          <VideoLibrary videos={videos} setVideos={setVideos} displayVideoLibrary={displayVideoLibrary} setDisplayVideoLibrary={setDisplayVideoLibrary} url={url}/>  
+          <VideoLibrary videos={videos} setVideos={setVideos} displayVideoLibrary={displayVideoLibrary} 
+          setDisplayVideoLibrary={setDisplayVideoLibrary} url={url} applyCategoryColor={applyCategoryColor}/>  
       </div>      
     ) : (
 
-    <div className="p-2 h-screen w-screen bg-gray-800 flex">
+    <div className="p-2 h-full w-full bg-gray-800 flex">
      {/* sm:bg-gray-600 md:bg-gray-400 lg:bg-gray-600 xl:bg-gray-800 2xl:bg-gray-400 */}
 
 {/*****2xl*****2xl*****2xl*****2xl*****2xl*****2xl*****/}

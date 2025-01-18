@@ -1,15 +1,12 @@
 import React, { useState, useEffect } from 'react'
 
-
-
-
 let videoId="GFQaEYEc8_8"
 
-const VideoQueueCard = () => {
+const VideoQueueCard = ( { videos }) => {
     const thumbnailUrl = `https://img.youtube.com/vi/${videoId}/maxresdefault.jpg`;
 
   return (
-        <div className="relative rounded-lg overflow-hidden flex"> 
+        <div className="relative border-2 p-1 rounded-lg overflow-hidden flex"> 
             
             <img
               src={thumbnailUrl} 
@@ -18,7 +15,7 @@ const VideoQueueCard = () => {
             />
          
           <div className="absolute inset-0 flex justify-end items-center">
-          <div className="text-3xl text-red-800 justify-end mr-4">x</div>
+          <div className="text-3xl text-red-700 justify-end">x</div>
          {/* <svg
           xmlns="http://www.w3.org/2000/svg"
           fill="none"

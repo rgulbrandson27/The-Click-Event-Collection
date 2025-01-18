@@ -3,7 +3,8 @@ import AddVideoBox from './AddVideoBox';
 import VideoInfoCard from './VideoInfoCard';
 import AddVideoForm from './AddVideoForm';
 
-const VideoLibrary = ( {videos, setVideos, displayVideoLibrary, setDisplayVideoLibrary, url} ) => {
+
+const VideoLibrary = ( {videos, setVideos, displayVideoLibrary, setDisplayVideoLibrary, url, applyCategoryColor} ) => {
   
     // const [videos, setVideos] = useState = ('')
     const [updatedVideoList, setUpdatedVideoList] = useState('')
@@ -52,10 +53,7 @@ const VideoLibrary = ( {videos, setVideos, displayVideoLibrary, setDisplayVideoL
             <div  className="bg-gray-400 h-full w-full overflow-y-auto 
             grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4
             gap-6 px-8 sm:px-4">
-
-                <AddVideoBox 
-              
-                />   
+                <AddVideoBox />   
        
                 {videos.map((video) => (
                 <VideoInfoCard 
@@ -70,10 +68,12 @@ const VideoLibrary = ( {videos, setVideos, displayVideoLibrary, setDisplayVideoL
                     isClip={video.isClip}
                     startTime={video.startTime}
                     endTime={video.endTime}
+                    category={video.category}
                     keywords={video.keywords}
                     numberInQueue={video.numberInQueue}
                     // dateProduced={video.dateProduce}
                     isWatched={video.isWatched}
+                    applyCategoryColor={applyCategoryColor}
                      />
                 ))};
             </div>
