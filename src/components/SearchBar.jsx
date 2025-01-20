@@ -5,7 +5,7 @@ const SearchBar = ( {handleShowLibrary} ) => {
 
     return (
       <>
-          <div className="h-full w-full text-indigo-500 rounded-lg mt-4">
+          <div className="h-full w-full text-indigo-500 rounded-lg mt-4 z-10">
               <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.0} stroke="currentColor" className="size-6 sm:size-8 xl:size-10
                    hover:text-yellow-400 transition duration-200 hover:scale-110 cursor-pointer"
                    onClick={()=> handleShowLibrary()}>

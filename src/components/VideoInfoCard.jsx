@@ -22,7 +22,7 @@ const VideoInfoCard = ( {
 
     return (
       <>
-        <div className={`bg-gray-200 aspect-video w-full flex flex-col border border-t-4 border-t-${applyCategoryColor(category)} shadow-sm rounded-xl`}>
+        <div className={`bg-gray-200 aspect-video w-full flex flex-col border border-t-8 border-t-${applyCategoryColor(category)} shadow-sm rounded-xl`}>
 
             <div className="p-4 md:p-5">
                 <h3 className="text-xl font-bold text-gray-800 dark:text-white">{videoTitle} </h3>

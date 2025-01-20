@@ -24,7 +24,8 @@ const colorKey = {
     DS: "bg-violet-600",
     FE: "bg-fuscia-500",
     BE: "bg-emerald-600",
-};
+}
+
 };
 
 
