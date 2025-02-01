@@ -1,10 +1,12 @@
 
 import React, { useState, useEffect } from 'react'
+import tv from '../assets/tv.svg'
 
 const VideoInfoCard = ( {
     videoTitle,
     videoLink,
-    videoThumbnail, 
+    // videoId,
+    // videoThumbnail, 
     channelName,
     channelAddress, 
     creatorName, 
@@ -17,29 +19,62 @@ const VideoInfoCard = ( {
     numberInQueue,
     dateProduced,
     isWatched,
-    applyCategoryColor
+    applyCategoryColor,
+    extractVideoId,
+    calculateVideoDuration
     } ) => {
 
+        const videoId = extractVideoId(videoLink); 
+        const videoLength = calculateVideoDuration(startTime, endTime);
+        const thumbnailUrl = videoId
+          ? `https://img.youtube.com/vi/${videoId}/hqdefault.jpg`
+          : 'https://via.placeholder.com/160x90?text=No+Thumbnail'; 
+      console.log(videoLength)
     return (
       <>
-        <div className={`bg-gray-200 aspect-video w-full flex flex-col border border-t-8 border-t-${applyCategoryColor(category)} shadow-sm rounded-xl`}>
+        <div className={`bg-gray-200 flex flex-col py-6 px-8 w-[420px] h-[260px] border border-t-8 justify-self-center border-t-${applyCategoryColor(category)} shadow-sm rounded-xl`}>
+            <h3 className="h-1/3 text-2xl font-bold text-gray-800">{videoTitle}</h3>
+            <div className="h-2/3 flex w-full">
 
-            <div className="p-4 md:p-5">
-                <h3 className="text-xl font-bold text-gray-800 dark:text-white">{videoTitle} </h3>
-                <p className="mt-2 text-gray-500 dark:text-neutral-400">With supporting text below as a natural lead-in to additional content.</p>
-                <p className="LINK text-pink-500">
-                        <a href={videoLink} target="_blank">link</a>
-                </p>
-                <a className="mt-3 inline-flex items-center gap-x-1 text-sm font-semibold rounded-lg border border-transparent
-                 text-blue-600 decoration-2 hover:text-blue-700 hover:underline focus:underline focus:outline-none focus:text-blue-700 
-                 disabled:opacity-50 disabled:pointer-events-none dark:text-blue-500 dark:hover:text-blue-600 dark:focus:text-blue-600" href="#">Card link
-                    <svg className="shrink-0 size-4" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                        <path d="m9 18 6-6-6-6"></path>
-                    </svg>
-                </a>
+                <div className="w-3/5 h-full flex flex-col gap-2 pt-1">
+                  <div className="flex flex-rows" >
+                      <img className=" h-6 w-10 mr-3 opacity-75 -ml-1" src={tv} alt="TV Icon" />
+                      <p className="text-lg text-gray-600 tracking-wider">{channelName}</p>
+                  </div>
+                  <div className={`opacity-80 w-3/4 rounded-lg bg-${applyCategoryColor(category)}`}>
+                      Watch Now
+                  </div>
+                  <div className={`opacity-80 w-3/4 rounded-lg bg-${applyCategoryColor(category)}`}>
+
+                      Add to Queue
+                  </div>
+                  <div className={`opacity-80 w-3/4 rounded-lg bg-${applyCategoryColor(category)}`}>
+
+                      View Keywords
+                  </div>
+                </div>
+
+                <div className="w-2/5 h-full flex flex-col">
+                <img
+                      src={thumbnailUrl} 
+                      alt="YouTube Thumbnail"
+                      className="w-full aspect-video object-cover rounded-lg mb-4"
+                     
+                    /> 
+                    <p className="text-gray-600 text-center tracking-wider">{videoLength}</p>
+                </div>
+
+      
             </div>
 
-        </div>
+          
+                    {/* <button>Watch</button>
+                    <button>Add to Queue</button> */}
+         
+                 
+                    {/* <button>Show Keywords</button> */}
+        
+          </div>
       </>
     )
   }

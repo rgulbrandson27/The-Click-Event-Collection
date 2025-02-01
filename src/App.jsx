@@ -15,14 +15,14 @@ const url = "https://663eca0fe3a7c3218a4b60b3.mockapi.io/videoTutorials";
 
 const App = () => {
 
-  const [videos, setVideos] = useState([])
-  const [displayVideoLibrary, setDisplayVideoLibrary] = useState();
+  const [videos, setVideos] = useState([]);
+  const [displayVideoLibrary, setDisplayVideoLibrary] = useState(true);
   const [tailwindSize, setTailwindSize] = useState('');
+  const [currentSelectedVideo, setCurrentSelectedVideo] = useState('');
   const windowSize = useWindowSize();
-  const videoId = "TJcHyfzkXf4"
+  // const videoId = "TJcHyfzkXf4"
 
   useEffect(() => {
-
     if (windowSize.width) {
     const newTailwindSize = determineTailwindSize(windowSize);
     setTailwindSize(newTailwindSize);
@@ -37,6 +37,21 @@ const App = () => {
       if (size.width >= 640) return "sm";
       return "xs";
   };
+
+  const extractVideoId = (videoLink) => {
+    try {
+      const urlObj = new URL(videoLink);
+      if (urlObj.hostname === 'youtu.be') {
+        return urlObj.pathname.substring(1);
+      } else if (urlObj.hostname === 'www.youtube.com' || urlObj.hostname === 'youtube.com') {
+        return urlObj.searchParams.get('v');
+      }
+      return null;
+    } catch (error) {
+      console.error('Invalid videoLink:', error.message);
+      return null;
+    }
+  }
   
   const applyCategoryColor = (category) => {
       const colorKey = {
@@ -79,13 +94,33 @@ const handleShowLibrary = () => {
     setDisplayVideoLibrary(true)
 };
 
+const calculateVideoDuration = (startTime, endTime) => {
+  const timeToSeconds = (time) => {
+    const [hours, minutes, seconds] = time.split(":").map(Number);
+    return hours * 3600 + minutes * 60 + seconds;
+  };
+  const startSeconds = timeToSeconds(startTime);
+  const endSeconds = timeToSeconds(endTime);
+
+  let durationSeconds = Math.abs(endSeconds - startSeconds);
+
+  const hours = Math.floor(durationSeconds / 3600);
+  durationSeconds %= 3600;
+  const minutes = Math.round(durationSeconds / 60);
+
+  const hoursStr = hours > 0 ? `${hours} hr${hours > 1 ? "s" : ""}` : "";
+  const minutesStr = minutes > 0 ? `${minutes} min` : "";
+
+  return [hoursStr, minutesStr].filter(Boolean).join("   ");
+}
+
   return (
     <>
     {displayVideoLibrary ? (
 
       <div className="bg-gray-600 h-screen w-full">
           <VideoLibrary videos={videos} setVideos={setVideos} displayVideoLibrary={displayVideoLibrary} 
-          setDisplayVideoLibrary={setDisplayVideoLibrary} url={url} applyCategoryColor={applyCategoryColor}/>  
+          setDisplayVideoLibrary={setDisplayVideoLibrary} url={url} applyCategoryColor={applyCategoryColor} extractVideoId={extractVideoId} calculateVideoDuration={calculateVideoDuration}/>  
       </div>      
     ) : (
 
@@ -105,7 +140,9 @@ const handleShowLibrary = () => {
 
             <div className="flex w-full mt-12">
               <div className="w-2/3 ml-12 mr-12">
-                  <VideoContainer videoId = {videoId} />
+                  <VideoContainer 
+                  // videoId = {videoId} 
+                  />
               </div>
 
               <div className="w-1/3 mr-14 ml-10">
@@ -127,7 +164,9 @@ const handleShowLibrary = () => {
 
             <div className="flex w-full mt-12">
               <div className="w-2/3 ml-6 mr-8">
-                  <VideoContainer videoId = {videoId} />
+                  <VideoContainer 
+                  // videoId = {videoId} 
+                  />
               </div>
 
               <div className="w-1/3 mr-10 ml-0 overflow-y-scroll">
@@ -149,7 +188,9 @@ const handleShowLibrary = () => {
 
             <div className="flex w-full mt-12">
               <div className="w-2/3 ml-8 mr-16">
-                  <VideoContainer videoId = {videoId} />
+                  <VideoContainer 
+                  // videoId = {videoId} 
+                  />
               </div>
 
               <div className="w-1/3 mr-10 ml-2">
@@ -170,7 +211,9 @@ const handleShowLibrary = () => {
             </div> 
 
             <div className="flex justify-center mx-20 mt-8">
-                <VideoContainer videoId = {videoId} />
+                <VideoContainer 
+                // videoId = {videoId} 
+                />
             </div>
 
             <div className="mt-6 mx-40 mb-4">
@@ -190,7 +233,9 @@ const handleShowLibrary = () => {
             </div> 
 
             <div className="flex justify-center mx-12 mt-8">
-                <VideoContainer videoId = {videoId} />
+                <VideoContainer 
+                // videoId = {videoId} 
+                />
             </div>
 
             <div className="mt-6 mx-32 mb-4">
@@ -209,7 +254,9 @@ const handleShowLibrary = () => {
             </div> 
 
             <div className="flex justify-center">
-                <VideoContainer videoId = {videoId} />
+                <VideoContainer 
+                // videoId = {videoId} 
+                />
             </div>
       
             <div className="px-14 mt-8 mb-2">
