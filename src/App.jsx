@@ -18,7 +18,7 @@ const App = () => {
   const [videos, setVideos] = useState([]);
   const [displayVideoLibrary, setDisplayVideoLibrary] = useState(true);
   const [tailwindSize, setTailwindSize] = useState('');
-  const [currentSelectedVideo, setCurrentSelectedVideo] = useState('');
+  const [currentVideo, setCurrentVideo] = useState('');
   const windowSize = useWindowSize();
   // const videoId = "TJcHyfzkXf4"
 
@@ -68,7 +68,12 @@ const App = () => {
       return colorKey[category] || "gray-400"; // Default
   };
   
- 
+  const handleVideoSelect = (videoId) => {
+    setCurrentVideo(videoId);
+    setDisplayVideoLibrary(false);
+  };
+  // <div className={`transition-opacity duration-500 ${displayVideoLibrary ? "opacity-100" : "opacity-0 hidden"}`}>
+
   // useEffect(() => {
   //   const fetchVideos = async () => {
   //     try {
@@ -120,7 +125,9 @@ const calculateVideoDuration = (startTime, endTime) => {
 
       <div className="bg-gray-600 h-screen w-full">
           <VideoLibrary videos={videos} setVideos={setVideos} displayVideoLibrary={displayVideoLibrary} 
-          setDisplayVideoLibrary={setDisplayVideoLibrary} url={url} applyCategoryColor={applyCategoryColor} extractVideoId={extractVideoId} calculateVideoDuration={calculateVideoDuration}/>  
+          setDisplayVideoLibrary={setDisplayVideoLibrary} url={url} applyCategoryColor={applyCategoryColor} 
+          extractVideoId={extractVideoId} calculateVideoDuration={calculateVideoDuration}
+          handleVideoSelect={handleVideoSelect}/>  
       </div>      
     ) : (
 
@@ -141,7 +148,7 @@ const calculateVideoDuration = (startTime, endTime) => {
             <div className="flex w-full mt-12">
               <div className="w-2/3 ml-12 mr-12">
                   <VideoContainer 
-                  // videoId = {videoId} 
+                    videoId = {videoId} 
                   />
               </div>
 
@@ -165,7 +172,7 @@ const calculateVideoDuration = (startTime, endTime) => {
             <div className="flex w-full mt-12">
               <div className="w-2/3 ml-6 mr-8">
                   <VideoContainer 
-                  // videoId = {videoId} 
+                    videoId = {videoId} 
                   />
               </div>
 
@@ -189,7 +196,7 @@ const calculateVideoDuration = (startTime, endTime) => {
             <div className="flex w-full mt-12">
               <div className="w-2/3 ml-8 mr-16">
                   <VideoContainer 
-                  // videoId = {videoId} 
+                      videoId = {videoId} 
                   />
               </div>
 
@@ -212,7 +219,7 @@ const calculateVideoDuration = (startTime, endTime) => {
 
             <div className="flex justify-center mx-20 mt-8">
                 <VideoContainer 
-                // videoId = {videoId} 
+                  videoId = {videoId} 
                 />
             </div>
 
@@ -234,7 +241,7 @@ const calculateVideoDuration = (startTime, endTime) => {
 
             <div className="flex justify-center mx-12 mt-8">
                 <VideoContainer 
-                // videoId = {videoId} 
+                  videoId = {videoId} 
                 />
             </div>
 
@@ -255,7 +262,7 @@ const calculateVideoDuration = (startTime, endTime) => {
 
             <div className="flex justify-center">
                 <VideoContainer 
-                // videoId = {videoId} 
+                  videoId = {videoId} 
                 />
             </div>
       

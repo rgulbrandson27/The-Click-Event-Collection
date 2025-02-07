@@ -1,8 +1,12 @@
 
 import React, { useState, useEffect } from 'react'
 import tv from '../assets/tv.svg'
+import circletag from '../assets/circletag.svg'
+import playbutton from '../assets/playbutton.svg'
+import queueicon from '../assets/queueicon.svg'
 
 const VideoInfoCard = ( {
+    videoId,
     videoTitle,
     videoLink,
     // videoId,
@@ -21,58 +25,62 @@ const VideoInfoCard = ( {
     isWatched,
     applyCategoryColor,
     extractVideoId,
-    calculateVideoDuration
+    calculateVideoDuration,
+    handleVideoSelect
     } ) => {
 
-        const videoId = extractVideoId(videoLink); 
+        const videoEmbeddedNumber = extractVideoId(videoLink); 
         const videoLength = calculateVideoDuration(startTime, endTime);
-        const thumbnailUrl = videoId
-          ? `https://img.youtube.com/vi/${videoId}/hqdefault.jpg`
+        const thumbnailUrl = videoEmbeddedNumber
+          ? `https://img.youtube.com/vi/${videoEmbeddedNumber}/hqdefault.jpg`
           : 'https://via.placeholder.com/160x90?text=No+Thumbnail'; 
       console.log(videoLength)
     return (
       <>
-        <div className={`bg-gray-200 flex flex-col py-6 px-8 w-[420px] h-[260px] border border-t-8 justify-self-center border-t-${applyCategoryColor(category)} shadow-sm rounded-xl`}>
-            <h3 className="h-1/3 text-2xl font-bold text-gray-800">{videoTitle}</h3>
+        <div className={`bg-gray-200 flex flex-col py-2 pl-8 pr-6 w-[420px] h-[260px] border border-t-8 justify-self-center border-t-${applyCategoryColor(category)} shadow-sm rounded-xl`}>
+            <h3 className="items-center flex h-1/3 text-2xl tracking-wide font-bold text-gray-800">{videoTitle}</h3>
             <div className="h-2/3 flex w-full">
 
-                <div className="w-3/5 h-full flex flex-col gap-2 pt-1">
-                  <div className="flex flex-rows" >
-                      <img className=" h-6 w-10 mr-3 opacity-75 -ml-1" src={tv} alt="TV Icon" />
-                      <p className="text-lg text-gray-600 tracking-wider">{channelName}</p>
-                  </div>
-                  <div className={`opacity-80 w-3/4 rounded-lg bg-${applyCategoryColor(category)}`}>
-                      Watch Now
-                  </div>
-                  <div className={`opacity-80 w-3/4 rounded-lg bg-${applyCategoryColor(category)}`}>
+                <div className="w-3/5 h-full flex flex-col gap-2">
+                  <div className={`flex flex-row w-5/6`} >
+                  {/* <div className={`flex flex-rows border-b-${applyCategoryColor(category)} border border-b-4 w-3/4`} > */}
 
-                      Add to Queue
+                      <img className=" h-6 w-10 mr-3 opacity-50 -ml-1" src={tv} alt="TV Icon" />
+                      <p className="text-lg tracking-wider truncate">{channelName}</p>
                   </div>
-                  <div className={`opacity-80 w-3/4 rounded-lg bg-${applyCategoryColor(category)}`}>
 
-                      View Keywords
+                  <div className={`space-y-1 font-bold mt-0.5 p-3 -ml-1
+                 shadow-[inset_0px_0px_16px_0.5px] shadow-${applyCategoryColor(category)}
+                 rounded-lg`}>
+         
+                  <div className={`flex flex-rows hover:underline hover:scale-105 cursor-pointer`} >
+                      <img className="mt-[4px] h-6 w-10 mr-3 opacity-75 -ml-1" src={playbutton} alt="TV Icon" />
+                      <p className="text-lg  tracking-wide hover:underline hover:scale-105">Watch Now</p>
+                  </div>
+                  <div className="flex flex-rows hover:underline cursor-pointer hover:scale-105" >
+                      <img className="mt-[4px] py-0.5 text-sm h-6 w-10 mr-3 opacity-75 -ml-1 transform -scale-x-100" src={queueicon} alt="TV Icon" />
+                      <p className="text-lg tracking-wide hover:underline ">Add to Queue</p>
+                  </div>
+                  <div className="flex flex-rows hover:underline cursor-pointer hover:scale-105" >
+                      <img className="mt-[4px] h-6 w-10 mr-3 opacity-75 -ml-1" src={circletag} alt="TV Icon" />
+                      <p className="text-lg hover:underline ">View Key Words</p>
                   </div>
                 </div>
+              </div>
 
                 <div className="w-2/5 h-full flex flex-col">
+                <div className="ml-5">
                 <img
                       src={thumbnailUrl} 
                       alt="YouTube Thumbnail"
-                      className="w-full aspect-video object-cover rounded-lg mb-4"
+                      className="w-full shadow-xl aspect-video object-cover rounded-lg mt-2"
                      
                     /> 
-                    <p className="text-gray-600 text-center tracking-wider">{videoLength}</p>
+                    <p className="text-gray-600 text-center mt-4 tracking-wider">{videoLength}</p>
                 </div>
-
+                </div>
       
             </div>
-
-          
-                    {/* <button>Watch</button>
-                    <button>Add to Queue</button> */}
-         
-                 
-                    {/* <button>Show Keywords</button> */}
         
           </div>
       </>

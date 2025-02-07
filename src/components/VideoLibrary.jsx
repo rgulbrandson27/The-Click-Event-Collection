@@ -6,7 +6,7 @@ import ColorPalette from './ColorPalette';
 import ColorKey from './ColorKey';
 
 
-const VideoLibrary = ( {videos, setVideos, displayVideoLibrary, setDisplayVideoLibrary, url, applyCategoryColor, extractVideoId, calculateVideoDuration } ) => {
+const VideoLibrary = ( {videos, setVideos, displayVideoLibrary, setDisplayVideoLibrary, url, applyCategoryColor, extractVideoId, calculateVideoDuration, handleVideoSelect } ) => {
   
     // const [videos, setVideos] = useState = ('')
     const [updatedVideoList, setUpdatedVideoList] = useState('')
@@ -34,9 +34,7 @@ const VideoLibrary = ( {videos, setVideos, displayVideoLibrary, setDisplayVideoL
     const handleShowColorKey = () => {
       setDisplayColorKey((prev) => !prev);
     };
-    //   displayColorKey ? setDisplayColorKey(false)
-    //   : setDisplayColorKey(true);
-    // };
+ 
 
     return  (
 
@@ -69,9 +67,9 @@ const VideoLibrary = ( {videos, setVideos, displayVideoLibrary, setDisplayVideoL
                 {videos.map((video) => (
                 <VideoInfoCard 
                     key={video.id}
+                    videoId={video.id}
                     videoTitle={video.videoTitle}
                     videoLink={video.videoLink}
-                    // videoThumbnail={video.videoThumbnail}
                     channelName={video.channelName}
                     channelAddress={video.channelAddress}
                     creatorName={video.creatorName}
@@ -87,7 +85,8 @@ const VideoLibrary = ( {videos, setVideos, displayVideoLibrary, setDisplayVideoL
                     applyCategoryColor={applyCategoryColor}
                     extractVideoId={extractVideoId}
                     calculateVideoDuration={calculateVideoDuration}
-                     />
+                    handleVideoSelect={handleVideoSelect}
+                    />
                 ))};
             </div>
             )}
