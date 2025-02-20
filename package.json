@@ -16,6 +16,9 @@
     "@headlessui/react": "^2.2.0",
     "@heroicons/react": "^2.2.0",
     "react": "^18.2.0",
+    "react-beautiful-dnd": "^13.1.1",
+    "react-dnd": "^16.0.1",
+    "react-dnd-html5-backend": "^16.0.1",
     "react-dom": "^18.2.0",
     "react-youtube": "^10.1.0"
   },
@@ -24,6 +27,7 @@
     "@types/react-dom": "^18.2.21",
     "@vitejs/plugin-react-swc": "^3.5.0",
     "autoprefixer": "^10.4.20",
+    "daisyui": "^4.12.23",
     "eslint": "^8.57.0",
     "eslint-plugin-react": "^7.34.0",
     "eslint-plugin-react-hooks": "^4.6.0",

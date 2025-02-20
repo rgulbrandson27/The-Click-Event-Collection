@@ -12,6 +12,7 @@ module.exports = {
     "border-t-violet-600",
     "border-t-fuchsia-500", 
     "border-t-emerald-600",
+    "border-t-green-500",
     "border-t-gray-400",
     "border-b-cyan-600",
     "border-b-blue-600",
@@ -22,7 +23,19 @@ module.exports = {
     "border-b-violet-600",
     "border-b-fuchsia-500", 
     "border-b-emerald-600",
+    "border-b-green-500",
     "border-b-gray-400",
+    "border-l-cyan-600",
+    "border-l-blue-600",
+    "border-l-orange-500",
+    "border-l-amber-400",
+    "border-l-teal-400",
+    "border-l-pink-500",
+    "border-l-violet-600",
+    "border-l-fuchsia-500", 
+    "border-l-emerald-600",
+    "border-l-gray-400",
+    "border-l-green-500",
     "shadow-cyan-600",
     "shadow-blue-600",
     "shadow-orange-500",
@@ -32,13 +45,16 @@ module.exports = {
     "shadow-violet-600",
     "shadow-fuchsia-500", 
     "shadow-emerald-600",
+    "shadow-green-500",
     "shadow-gray-400",
 
   ],
   theme: {
     extend: {},
   },
-  plugins: [],
+  plugins: [
+    require('daisyui')
+  ],
 }
 
 

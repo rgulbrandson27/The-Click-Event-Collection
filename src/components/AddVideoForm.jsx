@@ -6,21 +6,16 @@ import TimerInput from './TimerInput';
 import CategoryDropDown from './CategoryDropDown';
 
 
-
-
-const AddVideoForm = ({ displayAddVideoForm, setDisplayAddVideoForm, displayVideoLibrary, setDisplayVideoLibrary, setVideos, videos, url }) => {
+const AddVideoForm = ({ setDisplayAddVideoForm, setVideos, videos, url }) => {
 
     const [newVideoTitle, setNewVideoTitle] = useState("");
     const [newChannelName, setNewChannelName] = useState("");
     const [newVideoLink, setNewVideoLink] = useState("");
-    const [newVideoThumbnail, setNewVideoThumbnail] = useState("");
     const [newKeyword, setNewKeyword] = useState("");
     const [newKeywordList, setNewKeywordList] = useState([]);
     const [newStartTime, setNewStartTime] = useState("00:00:00");
     const [newEndTime, setNewEndTime] = useState("");
     const [newCategory, setNewCategory] = useState("");
-
-
 
     const createNewVideo = async (e) => {
       e.preventDefault();
@@ -29,7 +24,6 @@ const AddVideoForm = ({ displayAddVideoForm, setDisplayAddVideoForm, displayVide
       const newVideo = {
         videoTitle: newVideoTitle,
         videoLink: newVideoLink,
-        videoThumbnail: newVideoThumbnail,
         channelName: newChannelName, 
         channelAddress: undefined,
         creatorName: undefined,
@@ -40,13 +34,14 @@ const AddVideoForm = ({ displayAddVideoForm, setDisplayAddVideoForm, displayVide
         keywords: newKeywordList,
         numberInQueue: undefined,
         isWatched: undefined,
+        category: newCategory,
       };
 
       // console.log("New Video (pre-filter):", newVideo)
 
-      const filteredVideo = Object.fromEntries(
-        Object.entries(newVideo).filter(([_, value]) => value !== undefined)
-      );
+      // const filteredVideo = Object.fromEntries(
+      //   Object.entries(newVideo).filter(([_, value]) => value !== undefined)
+      // );
     
       // console.log("Post-filter new video:", filteredVideo);
     
@@ -57,7 +52,7 @@ const AddVideoForm = ({ displayAddVideoForm, setDisplayAddVideoForm, displayVide
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify(filteredVideo),
+          body: JSON.stringify(newVideo),  //filteredVideo
         });
 
         if (!response.ok) {
@@ -71,21 +66,21 @@ const AddVideoForm = ({ displayAddVideoForm, setDisplayAddVideoForm, displayVide
 
       console.log("Response from API: ", createdVideo);
 
-      setDisplayAddVideoForm(false);
-      setDisplayVideoLibrary(true);
+      // setDisplayVideoLibrary(true);
+      setDisplayAddVideoForm(false)
 
     } catch (error) {
       console.log("Error creating video: ", error);
     }
   };
-  const handleCategorySelect = (category) => {
-    setNewCategory(category);
-  };
 
-  const handleCancel = () => {
-    setDisplayAddVideoForm(false);
-      setDisplayVideoLibrary(true);
-  }
+  // const handleCategorySelect = (category) => {
+  //   setNewCategory(category);
+  // };
+
+
+
+
   const addKeyword = () => {
     if (newKeyword.trim() !== "") {
       setNewKeywordList((prevKeywordList) => [...prevKeywordList, newKeyword.trim()]);
@@ -98,6 +93,58 @@ const AddVideoForm = ({ displayAddVideoForm, setDisplayAddVideoForm, displayVide
       prevKeywordList.filter((_, index) => index !== indexToRemove)
     );
   };
+
+  const handleCancel = () => {
+    setDisplayAddVideoForm(false);
+      // setDisplayVideoLibrary(true);
+  }
+//////////// QUEUE FUNCTIONS ////////////////
+
+const updateQueuePosition = async (videoId, newPosition) => {
+  try {
+    const response = await fetch(`https://663eca0fe3a7c3218a4b60b3.mockapi.io/videoTutorials/${videoId}`, {
+      method: 'PATCH',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ numberInQueue: newPosition })
+    });
+
+    if (!response.ok) {
+      throw new Error('Failed to update queue position');
+    }
+
+    const updatedVideo = await response.json();
+    console.log('Updated video:', updatedVideo);
+    return updatedVideo;
+  } catch (error) {
+    console.error('Error updating queue position:', error);
+  }
+};
+
+const handleAddToQueue = async (video) => {
+  // Find first available queue position (1-5)
+  const queuePositions = videos
+    .filter((v) => v.numberInQueue > 0)
+    .map((v) => v.numberInQueue);
+  
+  const availablePosition = [1, 2, 3, 4, 5].find(pos => !queuePositions.includes(pos));
+
+  if (!availablePosition) {
+    console.log("Queue is full!");
+    return;
+  }
+
+  // Update video data
+  const updatedVideo = await updateQueuePosition(video.id, availablePosition);
+  if (updatedVideo) {
+    setVideos((prevVideos) => 
+      prevVideos.map((v) => (v.id === video.id ? updatedVideo : v))
+    );
+  }
+};
+
+
 
       return (
         <>
@@ -117,13 +164,18 @@ const AddVideoForm = ({ displayAddVideoForm, setDisplayAddVideoForm, displayVide
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="size-7 mb-1 mr-2 text-gray-700">
                       <path d="M3.25 4A2.25 2.25 0 0 0 1 6.25v7.5A2.25 2.25 0 0 0 3.25 16h7.5A2.25 2.25 0 0 0 13 13.75v-7.5A2.25 2.25 0 0 0 10.75 4h-7.5ZM19 4.75a.75.75 0 0 0-1.28-.53l-3 3a.75.75 0 0 0-.22.53v4.5c0 .199.079.39.22.53l3 3a.75.75 0 0 0 1.28-.53V4.75Z" />
                </svg>
-              <CategoryDropDown
-                onCategorySelect={handleCategorySelect} />
-                {newCategory && (
-                  <div className="mt-4 text-white">
-                    <p>Selected Category: {newCategory} </p>
-                    </div>
-                )}
+              <CategoryDropDown   
+                  setNewCategory = {setNewCategory}
+              />
+                {/* // onCategorySelect={handleCategorySelect} 
+                // onChange={(e) => setNewCategory(e.target.value)}
+                // {newCategory && ( */}
+                {/* //   <div className="mt-4 text-white">
+                //     <p>Selected Category: {newCategory} </p> */}
+         
+                
+
+                
             </div>
           <input className="shadow appearance-none border rounded w-full py-2 mb-6 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline mt-4" 
               id="newVideoTitle" type="text" placeholder="Enter Full Title"
@@ -248,7 +300,7 @@ const AddVideoForm = ({ displayAddVideoForm, setDisplayAddVideoForm, displayVide
             <button
               type="submit"
               className="rounded-md bg-indigo-500 px-3 py-2 text-sm font-semibold text-white shadow-md hover:bg-indigo-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-            >
+              onClick = {createNewVideo}>
               Add Video
             </button>
         </div>

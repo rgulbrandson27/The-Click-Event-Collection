@@ -12,21 +12,22 @@ import React, { useState, useEffect } from 'react'
 // FE-fuscia-500
 // BE-emerald-600
 
-const ApplyColor = () => {
+// const ApplyColor = () => {
 
-const colorKey = {
-    React: "bg-cyan-600",
-    Data: "bg-blue-600", 
-    Java: "bg-orange-500",
-    JavaScript: "bg-amber-400",
-    Tailwind: "bg-teal-400",
-    AI: "bg-pink-500",
-    DS: "bg-violet-600",
-    FE: "bg-fuscia-500",
-    BE: "bg-emerald-600",
-}
+// const colorKey = {
+//     "Artificial Intelligence": "bg-pink-500",
+//     "Back End": "bg-emerald-600",
+//     "Data": "bg-blue-600", 
+//     "Data S&A": "bg-violet-600",
+//     "Front End": "bg-fuscia-500",
+//     "Java": "bg-orange-500",
+//     "JavaScript": "bg-amber-400",
+//     "Python": "bg-green-500",
+//     "React": "bg-cyan-600",
+//     "Tailwind": "bg-teal-400",
+// }
 
-};
+// };
 
 
-export default ApplyColor;
+// export default ApplyColor;

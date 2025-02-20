@@ -19,10 +19,10 @@ const ColorKey = ( { displayColorKey, setDisplayColorKey, handleShowColorKey } )
           
           <div className="drawer-side">
               <label htmlFor="my-drawer-4" aria-label="close sidebar" className="drawer-overlay"></label> */}
-          <ul className=" menu space-y-2 bg-base-200 text-base-content p-6">
+          <ul className="bg-base-200 text-base-content px-6 py-4">
             <li className="flex items-center gap-4">
                 <div className="bg-pink-500 rounded-full h-4 w-4"></div>
-                <div className="text-2xl">AI</div>
+                <div className="text-lg">Artificial Intelligence</div>
             </li>
             <li className="flex items-center gap-4">
                 <div className="bg-emerald-600 rounded-full h-4 w-4"></div>
@@ -30,7 +30,7 @@ const ColorKey = ( { displayColorKey, setDisplayColorKey, handleShowColorKey } )
             </li>
             <li className="flex items-center gap-4">
                 <div className="bg-blue-600 rounded-full h-4 w-4"></div>
-                <div className="text-2xl">Data</div>
+                <div className="text-2xl">Data S&A</div>
             </li>
             <li className="flex items-center gap-4">
                 <div className="bg-violet-600 rounded-full h-4 w-4"></div>
@@ -47,6 +47,10 @@ const ColorKey = ( { displayColorKey, setDisplayColorKey, handleShowColorKey } )
             <li className="flex items-center gap-4">
                 <div className="bg-amber-400 rounded-full h-4 w-4"></div>
                 <div className="text-2xl">JavaScript</div>
+            </li>
+            <li className="flex items-center gap-4">
+                <div className="bg-green-500 rounded-full h-4 w-4"></div>
+                <div className="text-2xl">Python</div>
             </li>
             <li className="flex items-center gap-4">
                 <div className="bg-cyan-600 rounded-full h-4 w-4"></div>

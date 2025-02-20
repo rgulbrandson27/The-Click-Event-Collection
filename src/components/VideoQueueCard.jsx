@@ -1,22 +1,78 @@
-import React, { useState, useEffect } from 'react'
+import React  from 'react'
+import {useDrag, useDrop } from 'react-dnd'
 
-let videoId="GFQaEYEc8_8"
+const VideoQueueCard = ( { video, index, moveCard, draggedIndex, setDraggedIndex, smallThumbnailUrl, applyCategoryColor, extractVideoId, calculateVideoDuration  }) => {
 
-const VideoQueueCard = ( { videos }) => {
-    const thumbnailUrl = `https://img.youtube.com/vi/${videoId}/maxresdefault.jpg`;
+  const videoNum = extractVideoId(video.videoLink); 
+  const videoLength = calculateVideoDuration(video.startTime, video.endTime);
 
-  return (
-        <div className="relative border-2 p-1 rounded-lg overflow-hidden flex"> 
+  const [{ isDragging }, drag] = useDrag({
+    type: 'VIDEO',
+    item: { index, video },
+    collect: (monitor) => ({
+      isDragging: monitor.isDragging(),
+    }),
+    end: () => {
+    }
+  });
+
+
+
+  const [{ isOver }, drop] = useDrop({
+    accept: 'VIDEO',
+    hover: (item) => {
+      if (item.index !== index) {
+        moveCard(item.index, index);  // Reorder cards on hover
+        item.index = index;  // Update the index of the dragged card
+      }
+    },
+    collect: (monitor) => ({
+      isOver: monitor.isOver(),
+    }),
+  });
+
+    return (
+          <div  
+          ref={(node) => drag(drop(node))}
+      style={{
+        opacity: isDragging ? 0.5 : 1,  // Make the dragged card semi-transparent
+        border: isOver ? '2px solid blue' : 'none',  // Optional: highlight the drop target
+      }}
+      
+              className={`cursor-grab active:cursor-grabbing  w-full flex flex-row items-center h-10 md:h-12 lg:h-24 bg-black border-l-${applyCategoryColor(video.category)} border-s-8 rounded-r-2xl`}  >
+                  <p className="text-md lg:w-2/3 lg:mx-2 lg:text-pretty mx-3 lg:truncate-0 truncate text-gray-300"> {video.videoTitle}</p>
+                      <img
+                        src={smallThumbnailUrl} 
+                        alt="YouTube Thumbnail"
+                        className="hidden lg:block w-1/3 shadow-xl aspect-video opacity-50 object-cover rounded-md mr-2"
+                      /> 
+          </div>
+              
+
+              )
+            }
+export default VideoQueueCard;
+    // const thumbnailUrl = `https://img.youtube.com/vi/${videoId}/maxresdefault.jpg`;
+
+  // return (
+  //       <div className="relative border-2 p-1 rounded-lg overflow-hidden flex"> 
             
-            <img
-              src={thumbnailUrl} 
-              alt="YouTube Thumbnail"
-              className="w-1/3 h-1/3 object-cover py-2 ml-56"
-            />
+  //           <img
+  //             src={thumbnailUrl} 
+  //             alt="YouTube Thumbnail"
+  //             className="w-1/3 h-1/3 object-cover py-2 ml-56"
+  //           />
          
-          <div className="absolute inset-0 flex justify-end items-center">
-          <div className="text-3xl text-red-700 justify-end">x</div>
-         {/* <svg
+  //         <div className="absolute inset-0 flex justify-end items-center">
+  //         <div className="text-3xl text-red-700 justify-end">x</div>
+      
+  //         </div>
+    
+  //       </div>
+
+
+
+   {/* <svg
           xmlns="http://www.w3.org/2000/svg"
           fill="none"
           viewBox="0 0 24 24"
@@ -30,18 +86,8 @@ const VideoQueueCard = ( { videos }) => {
             d="M14 10l-2 2m0 0l-2-2m2 2V4m8 2a9 9 0 11-9-9 9 9 0 019 9z"
           />  
           </svg> */}
-          </div>
-          {/* <img className="h-10 w-20" src="https://i.ytimg.com/an_webp/GFQaEYEc8_8/mqdefault_6s.webp?du=3000&sqp=CJi52rYG&rs=AOn4CLAepURWfPQYxZVCZim3cAXelF1zqA"></img> */}
+      {/* <img className="h-10 w-20" src="https://i.ytimg.com/an_webp/GFQaEYEc8_8/mqdefault_6s.webp?du=3000&sqp=CJi52rYG&rs=AOn4CLAepURWfPQYxZVCZim3cAXelF1zqA"></img> */}
           {/* <p className="flex">Learn Database Normalization</p> */}
-        </div>
-   
-    
-    
-  )
-}
-export default VideoQueueCard;
-
-
 // "videoName": "Learn Database Normalization - 1NF, 2NF, 3NF, 4NF, 5NF",
 //         "videoLink": "https://www.youtube.com/watch?v=GFQaEYEc8_8",
 //         "videoThumbnail": "https://i.ytimg.com/an_webp/GFQaEYEc8_8/mqdefault_6s.webp?du=3000&sqp=CJi52rYG&rs=AOn4CLAepURWfPQYxZVCZim3cAXelF1zqA",

@@ -6,68 +6,71 @@ import ColorPalette from './ColorPalette';
 import ColorKey from './ColorKey';
 
 
-const VideoLibrary = ( {videos, setVideos, displayVideoLibrary, setDisplayVideoLibrary, url, applyCategoryColor, extractVideoId, calculateVideoDuration, handleVideoSelect } ) => {
-  
-    // const [videos, setVideos] = useState = ('')
-    const [updatedVideoList, setUpdatedVideoList] = useState('')
-    const [displayAddVideoForm, setDisplayAddVideoForm] = useState(false);
-    const [displayColorKey, setDisplayColorKey] = useState(false);
+const VideoLibrary = ( {videos, fetchVideos, setVideos, displayVideoLibrary, setDisplayVideoLibrary, url, applyCategoryColor, extractVideoId, 
+  calculateVideoDuration, handleWatchVideo, handleAddToQueue, handleViewKeywords, setDisplayKeywords, 
+  displayKeywords } ) => {
 
-      useEffect(() => {
-        const fetchVideos = async () => {
-          try {
-            const response = await fetch(url);
-            const data = await response.json();
-      
-            console.log("Fetched videos:", data);
-            setVideos(data);
-            // setCurrentUser(data.find(user => user.id === "1") || null);
-            // console.log(data.find(user => user.id === "1")); 
-            // Logs the user with id 1 or null
-          } catch (error) {
-            console.error("Error fetching video data:", error);
-          }
-        };
-        fetchVideos();
-      }, []); 
+    const [displayColorKey, setDisplayColorKey] = useState(false);
+    const [displayAddVideoForm, setDisplayAddVideoForm] = useState(false);
+    
+
+    useEffect(() => {
+      fetchVideos();
+    }, []); 
 
     const handleShowColorKey = () => {
       setDisplayColorKey((prev) => !prev);
     };
- 
+    
+    const handleShowAddVideoForm = () => {
+      setDisplayAddVideoForm(true);
+    }
 
     return  (
-
-    <div className="bg-gray-400 w-full h-full p-4">
-      <div className="w-full bg-gray-400 h-14 mb-4 relative">
-        <h1 className="text-center text-5xl text-blue-700 mb-6 justify-center">Video Library</h1>
-        <div className = "absolute h-full top-0 right-4 p-2 flex">
+    <div className="bg-gray-800 w-full h-full p-4 lg:p-12 -xl:m-2">
+      <div className="w-full bg-gray-800 h-14 mb-4 relative">
+        <h1 className="text-center text-5xl text-yellow-200 mb-6 justify-center">Video Library</h1>
+        <div className = "absolute h-full top-0 right-4 p-3 flex">
           < ColorPalette 
             handleShowColorKey={handleShowColorKey}  />
         </div>
-        <div>
+        <div >
           < ColorKey displayColorKey={displayColorKey} setDisplayColorKey={setDisplayColorKey} handleShowColorKey={handleShowColorKey}/>
         </div>
       </div>
 
         { displayAddVideoForm ? ( 
-                <div className="w-full flex justify-center">
+                <div className="w-full flex justify-center xl:p-1">
                     <div className="w-5/6 sm:w-2/3 md:w-1/2 lg:px-10 xl:px-24 xl:1/3">
-                      <AddVideoForm videos={videos} setVideos={setVideos} displayAddVideoForm={displayAddVideoForm} setDisplayAddVideoForm={setDisplayAddVideoForm} displayVideoLibrary={displayVideoLibrary} setDisplayVideoLibrary={setDisplayVideoLibrary} updatedVideoList={updatedVideoList} calculateVideoDuration={calculateVideoDuration} setUpdatedVideoList={setUpdatedVideoList} url={url}/>
+                      <AddVideoForm 
+                      videos={videos} 
+                      setVideos={setVideos} 
+                      // handleShowAddVideoForm={handleShowAddVideoForm}
+                      displayAddVideoForm={displayAddVideoForm} 
+                      setDisplayAddVideoForm={setDisplayAddVideoForm}
+                      // handleCancel={handleCancel}
+                      displayVideoLibrary={displayVideoLibrary} 
+                      setDisplayVideoLibrary={setDisplayVideoLibrary} 
+                      // updatedVideoList={updatedVideoList} 
+                      calculateVideoDuration={calculateVideoDuration} 
+              
+                      // setUpdatedVideoList={setUpdatedVideoList} 
+                      url={url}/>
                     </div>
                 </div>
             // <div lassName="w-full flex justify-centerc">
             //     <div className="px-10 sm:px-20 md:px-44 lg:px-80 xl:px-0 xl:w-1/3">
-            ) : (
-            <div  className="bg-gray-400 h-full w-full overflow-y-auto 
-            grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4
-            gap-4 px-12">
-                <AddVideoBox />   
-
+          ) : (
+            <div  className="bg-gray-800 h-full w-full overflow-y-auto 
+            grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 
+            gap-4 px-12 xl:px-0 xl:m-6">
+              
+                <AddVideoBox 
+                    onClick = { handleShowAddVideoForm }/>   
                 {videos.map((video) => (
                 <VideoInfoCard 
                     key={video.id}
-                    videoId={video.id}
+                    video={video}
                     videoTitle={video.videoTitle}
                     videoLink={video.videoLink}
                     channelName={video.channelName}
@@ -85,7 +88,11 @@ const VideoLibrary = ( {videos, setVideos, displayVideoLibrary, setDisplayVideoL
                     applyCategoryColor={applyCategoryColor}
                     extractVideoId={extractVideoId}
                     calculateVideoDuration={calculateVideoDuration}
-                    handleVideoSelect={handleVideoSelect}
+                    handleWatchVideo={handleWatchVideo}
+                    handleAddToQueue={handleAddToQueue}
+                    handleViewKeywords={handleViewKeywords}
+                    displayKeywords={displayKeywords}
+                    setDisplayKeywords={setDisplayKeywords}
                     />
                 ))};
             </div>
