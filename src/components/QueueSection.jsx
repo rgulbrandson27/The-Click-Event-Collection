@@ -1,17 +1,31 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState } from 'react'
 import VideoQueueCard from './VideoQueueCard';
-import {useDrag, useDrop} from 'react-dnd'
+import {useDrop} from 'react-dnd'
 
 
-const QueueSection = ({  videosInQueue, setVideosInQueue, applyCategoryColor, extractVideoId, calculateVideoDuration }) => {
+const QueueSection = ({  videosInQueue, updateVideoQueue, setVideosInQueue, applyCategoryColor, extractVideoId, calculateVideoDuration }) => {
   
   const [draggedIndex, setDraggedIndex] = useState(null);
 
-  const moveCard = (dragIndex, targetIndex) => {
+  const getTargetIndex = (monitor) => {
+    const clientOffset = monitor.getClientOffset();
+    if (clientOffset) {
+      const targetIndex = Math.floor(clientOffset.y / ITEM_HEIGHT);
+      return targetIndex;
+    }
+    return -1; 
+  };
+
+
+  const moveCard = (draggedIndex, targetIndex) => {
     const updatedQueue = [...videosInQueue];
     const [draggedItem] = updatedQueue.splice(draggedIndex, 1);
     updatedQueue.splice(targetIndex, 0, draggedItem);
+    updatedQueue.forEach((video, index) => {
+      video.numberInQueue = index + 1;
+    });
     setVideosInQueue(updatedQueue);
+    updateVideoQueue(updatedQueue);
   };
   // const [{ isOver }, drop] = useDrop({
   //   accept: 'VIDEO_ITEM', // Define the type of draggable items
@@ -26,8 +40,13 @@ const QueueSection = ({  videosInQueue, setVideosInQueue, applyCategoryColor, ex
   const [, drop] = useDrop({
     accept: 'VIDEO',
     drop: (item, monitor) => {
-      const targetIndex = getTargetIndex(monitor);  // Some logic to determine where the item is dropped
-      moveCard(item.index, targetIndex);  // Move the item to the new position
+      const clientOffset = monitor.getClientOffset();
+      if (clientOffset) {
+      const targetIndex = Math.floor(monitor.getClientOffset().y / ITEM_HEIGHT); 
+      if (targetIndex >= 0) {
+      moveCard(item.index, targetIndex);  
+      }
+    }
     },
   });
 
@@ -41,18 +60,18 @@ const QueueSection = ({  videosInQueue, setVideosInQueue, applyCategoryColor, ex
       </div>
       <div className="relative w-full h-full p-1 bg-gradient-to-r from-yellow-200 to-green-500 flex flex-col items-center rounded-lg"> 
 
-          <div className=" w-full h-full bg-gray-800 rounded-lg overflow-scroll px-10 md:px-12 lg:px-4 xl:px-6 2xl:px-8 pt-9 md:pt-8 sm:pt-10 pb-2 lg:pb-4 xl:pb-0 space-y-3 lg:space-y-4 2xl:pb-0">
+          <div className=" w-full h-full bg-gray-800 rounded-lg overflow-scroll px-10 md:px-12 lg:px-4 xl:px-6 2xl:px-8 pt-9 md:pt-8 sm:pt-10 pb-2 lg:pb-4 xl:pb-0 space-y-3 lg:space-y-4 2xl:pb-0"
+            ref={drop} >
               {videosInQueue.map((video, index) => (
                       <VideoQueueCard 
                       key={video.id} 
                       video={video} 
                       index={index}
+                      updateVideoQueue={updateVideoQueue}
+                      videosInQueue={videosInQueue}
                       moveCard={moveCard}
                       draggedIndex={draggedIndex}
-                      setDragIndex={setDraggedIndex}
-                      videoTitle={video.videoTitle}
-                      videoLink={video.videoLink}
-                      videoCategory={video.videoCategory}
+                      setDraggedIndex={setDraggedIndex}
                       extractVideoId={extractVideoId}
                       applyCategoryColor={applyCategoryColor}
                       calculateVideoDuration={calculateVideoDuration}
