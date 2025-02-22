@@ -84,21 +84,31 @@ const App = () => {
       const response = await fetch(url);
       const data = await response.json();
 
-      setVideos(data);
-      setVideosInQueue(filterAndSortVideosForQueue(data));
+      const videosWithQueueInfo = data.map(video => ({
+        ...video,
+        originalNumberInQueue: video.numberInQueue,  // Always fresh on fetch
+      }));
+
+      setVideos(videosWithQueueInfo);
+      setVideosInQueue(filterAndSortVideosForQueue(videosWithQueueInfo));
+
+      // setVideos(data);
+      // setVideosInQueue(filterAndSortVideosForQueue(data));
 
     } catch (error) {
       console.error("Error fetching video data:", error);
     }
   };
 
-
   const filterAndSortVideosForQueue = (videos) => {
     return videos
       .filter(video => video.numberInQueue >= 1 && video.numberInQueue <=5)
-      .sort((a,b) => a.numberInQueue - b.numberInQueue);
-    };
- 
+      .sort((a,b) => a.numberInQueue - b.numberInQueue)
+      .map(video => ({
+        ...video,
+        originalNumberInQueue: video.numberInQueue,
+      }));
+  };
   // const updateVideoQueue = async (updatedQueue) => {
   //   try {
   //     for (const video of updatedQueue) {
@@ -119,7 +129,7 @@ const App = () => {
 
   
 
-  const handleViewKeywords = (video) => {
+const handleViewKeywords = (video) => {
     setDisplayKeywords((prevId) => (prevId === video.id ? null : video.id));
   }
        
@@ -146,42 +156,111 @@ const calculateVideoDuration = (startTime, endTime) => {
   const minutesStr = minutes > 0 ? `${minutes} min` : "";
 
   return [hoursStr, minutesStr].filter(Boolean).join("   ");
+  
 }
 
-// const ItemType = "VIDEO";
 
 const updateVideoQueue = async (updatedQueue) => {
+  console.log("Final Queue Order:", updatedQueue);
+
   try {
-    for (let i = 0; i < updatedQueue.length; i++) {
-      const video = updatedQueue[i];
-      if (video.numberInQueue !== (video.originalNumberInQueue || video.numberInQueue)) {
+    const updates = updatedQueue.filter(video => video.numberInQueue !== video.originalNumberInQueue);
+    console.log("Videos to update:", updates);
+
+    for (const video of updates) {
+      console.log(`Attempting to update video ID ${video.id} with numberInQueue: ${video.numberInQueue}`);
 
       const response = await fetch(`${url}/${video.id}`, {
         method: 'PATCH',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          numberInQueue: video.numberInQueue,
-        }),
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ numberInQueue: video.numberInQueue }),
       });
-
-      if (!response.ok) {
-        throw new Error(`Failed to update video with ID: ${video.id}`);
-      }
-      const updatedVideo = await response.json();
-      console.log('Updated video:', updatedVideo);
-    }
+      console.log(`Response for video ID ${video.id}:`, response);
+      if (!response.ok) throw new Error(`Failed to update video with ID: ${video.id}`);
+      console.log(`Fetching: ${url}/${video.id}`);
+      // Update originalNumberInQueue after successful PATCH
+      video.originalNumberInQueue = video.numberInQueue;
     }
 
+    setVideosInQueue(updatedQueue);
+    console.log("Queue updated successfully.");
   } catch (error) {
     console.error('Error updating video queue:', error);
   }
 };
-const handleQueueUpdate = (newOrder) => {
-  setVideosInQueue(newOrder); // Update the local state with the new order
-  updateVideoQueue(newOrder);  // Send the updated order to the backend
-};
+
+
+/////////////////// const ItemType = "VIDEO";
+// const updateVideoQueue = async (updatedQueue) => {
+//   console.log("Final Updated Queue", updatedQueue);
+//   try {
+//     const updatedVideos = [...updatedQueue];
+//     for (const video of updatedQueue) {
+//       console.log(`Checking video ID ${video.id}:`, {
+//         numberInQueue: video.numberInQueue,
+//         originalNumberInQueue: video.originalNumberInQueue,
+//       });
+
+      // Only send a PATCH request if the queue position has changed
+  //     if (video.numberInQueue !== video.originalNumberInQueue) {
+  //       const response = await fetch(`${url}/${video.id}`, {
+  //         method: 'PATCH',
+  //         headers: { 'Content-Type': 'application/json' },
+  //         body: JSON.stringify({ numberInQueue: video.numberInQueue }),
+  //       });
+  //       console.log(`Response for video ID ${video.id}:`, response);
+
+  //       if (!response.ok) {
+  //         throw new Error(`Failed to update video with ID: ${video.id}`);
+  //       }
+  //       // const updatedVideo = await response.json();
+  //       video.originalNumberInQueue = video.numberInQueue;
+  //       }
+  //     }
+  //     setVideosInQueue(updatedVideos);
+  //     console.log("Queue update successful");
+  //   } catch (error) {
+  //     console.error('Error updating video queue:', error);
+  //   }
+ ////////////////////// // };
+  
+  const handleQueueUpdate = (newOrder) => {
+    setVideosInQueue(newOrder); // Update the local state with the new order
+    updateVideoQueue(newOrder);  // Send the updated order to the backend
+  };
+
+//PATCH
+// async function applyUpdates() {
+//   try {
+//     if (!Object.keys(currentData).length) {
+//       console.warn("currentData is not populated yet. Calling openUpdateModal.");
+//       await openUpdateModal(updateModalId); 
+//     }
+//     collectNewUserData(); // Collect new user data from form
+//     extractUpdatedData(); // Extract updated data based on currentData and newData
+//     await $.ajax({
+//       url: `${url}/${updateModalId}`,
+//       method: "PATCH",
+//       contentType: "application/json",
+//       dataType: "json",
+//       data: JSON.stringify(updatedData),
+//       success: function(response) {
+//           location.reload(); 
+  // try {
+  //   for (let i = 0; i < updatedQueue.length; i++) {
+  //     const video = updatedQueue[i];
+  //     if (video.numberInQueue !== (video.originalNumberInQueue || video.numberInQueue)) {
+
+  //     const response = await fetch(`${url}/${video.id}`, {
+  //       method: 'PATCH',
+  //       headers: {
+  //         'Content-Type': 'application/json',
+  //       },
+  //       body: JSON.stringify({
+  //         numberInQueue: video.numberInQueue,
+  //       }),
+  //     });
+
 
   return (
     <>

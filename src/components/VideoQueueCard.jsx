@@ -1,7 +1,7 @@
 import React  from 'react'
 import {useDrag, useDrop } from 'react-dnd'
 
-const VideoQueueCard = ( { video, index, moveCard, updateVideoQueue, draggedIndex, setDraggedIndex, applyCategoryColor, extractVideoId, calculateVideoDuration, videosInQueue  }) => {
+const VideoQueueCard = ( { video, index, moveCard, updateVideoQueue, applyCategoryColor, extractVideoId, calculateVideoDuration, videosInQueue  }) => {
 
   const videoNum = extractVideoId(video.videoLink); 
   const videoLength = calculateVideoDuration(video.startTime, video.endTime);
@@ -10,16 +10,6 @@ const VideoQueueCard = ( { video, index, moveCard, updateVideoQueue, draggedInde
     ? `https://img.youtube.com/vi/${videoNum}/hqdefault.jpg`
     : 'https://via.placeholder.com/160x90?text=No+Thumbnail'; 
 
-
-    const handleDragEnd = () => {
-      if (!videosInQueue) return; 
-      const newOrder = videosInQueue.map((v, idx) => ({
-          ...v,
-          numberInQueue: idx + 1,
-      }));
-      updateVideoQueue(videosInQueue);
-      setDraggedIndex(null);
-  };  
   
   const [{ isDragging }, drag] = useDrag({
     type: 'VIDEO',
@@ -27,26 +17,37 @@ const VideoQueueCard = ( { video, index, moveCard, updateVideoQueue, draggedInde
     collect: (monitor) => ({
       isDragging: monitor.isDragging(),
     }),
-  
-    end: (_, monitor) => {
-      if (monitor.didDrop()) {
-        handleDragEnd();
-      }
-    }
   });
+  
+  //   end: (_, monitor) => {
+  //     if (monitor.didDrop()) {
+  //       updateVideoQueue(videosInQueue);
+  //     }
+  //   }
+  // });
 
-  const [ {isOver}, drop ] = useDrop({
+  // const [ {isOver}, drop ] = useDrop({
+  //   accept: 'VIDEO',
+  //   hover: (item, monitor) => {
+  //     // if (!monitor.isDragging()) return;
+  //     if (item.index !== index) {
+  //       moveCard(item.index, index);  
+  //       item.index = index;  
+  //     }
+  //   },
+  //   collect: (monitor) => ({
+  //     isOver: monitor.isOver(),
+  //   }),
+  // });
+
+  const [{ isOver }, drop] = useDrop({
     accept: 'VIDEO',
-    hover: (item, monitor) => {
-      // if (!monitor.isDragging()) return;
-      if (item.index !== index) {
-        moveCard(item.index, index);  
-        item.index = index;  
+    hover: (draggedItem) => {
+      if (draggedItem.index !== index) {
+        moveCard(draggedItem.index, index); // Only update local order
+        draggedItem.index = index;
       }
     },
-    collect: (monitor) => ({
-      isOver: monitor.isOver(),
-    }),
   });
 
     return (
