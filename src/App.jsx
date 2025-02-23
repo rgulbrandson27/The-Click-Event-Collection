@@ -18,66 +18,163 @@ const App = () => {
   const [displayKeywords, setDisplayKeywords] = useState(false);
   const [videosInQueue, setVideosInQueue] = useState([]);
   const [updatedVideoList, setUpdatedVideoList] = useState('')
-
-  const windowSize = useWindowSize();
-
-  useEffect(() => {
-    if (windowSize.width) {
-    const newTailwindSize = determineTailwindSize(windowSize);
-    setTailwindSize(newTailwindSize);
-    }
-  }, [windowSize]);
-
+  
   useEffect(() => {
     fetchVideos(); 
   }, []);
 
-  const determineTailwindSize = (size) => {
-      if (size.width >= 1536) return "2xl";
-      if (size.width >= 1280) return "xl";
-      if (size.width >= 1024) return "lg";
-      if (size.width >= 768) return "md";
-      if (size.width >= 640) return "sm";
-      return "xs";
-  };
-
-  const extractVideoId = (videoLink) => {
+  const updateVideoQueue = async (updatedQueue) => {
+    console.log("Final Queue Order:", updatedQueue);
+  
     try {
-      const urlObj = new URL(videoLink);
-      if (urlObj.hostname === 'youtu.be') {
-        return urlObj.pathname.substring(1);
-      } else if (urlObj.hostname === 'www.youtube.com' || urlObj.hostname === 'youtube.com') {
-        return urlObj.searchParams.get('v');
+      const updates = updatedQueue.filter(video => video.numberInQueue !== video.originalNumberInQueue);
+      console.log("Videos to update:", updates);
+  
+      for (const video of updates) {
+        console.log(`Attempting to update video ID ${video.id} with numberInQueue: ${video.numberInQueue}`);
+  
+        const response = await fetch(`${url}/${video.id}`, {
+          method: 'PATCH',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ numberInQueue: video.numberInQueue }),
+        });
+        console.log(`Response for video ID ${video.id}:`, response);
+        if (!response.ok) throw new Error(`Failed to update video with ID: ${video.id}`);
+        console.log(`Fetching: ${url}/${video.id}`);
+        // Update originalNumberInQueue after successful PATCH
+        video.originalNumberInQueue = video.numberInQueue;
       }
-      return null;
+  
+      setVideosInQueue(updatedQueue);
+      console.log("Queue updated successfully.");
     } catch (error) {
-      console.error('Invalid videoLink:', error.message);
-      return null;
+      console.error('Error updating video queue:', error);
     }
-  }
+  };
   
-  const applyCategoryColor = (category) => {
-    //add any new colors to config file
-      const colorKey = {
-          "Artificial Intelligence": "pink-500",
-          "Back End": "emerald-600",
-          "Data": "blue-600", 
-          "Data S&A": "violet-600",
-          "Front End": "fuchsia-500",
-          "Java": "orange-500",
-          "JavaScript": "amber-400",
-          "Python": "green-500",
-          "React": "cyan-600",
-          "Tailwind": "teal-400",
+    // const removeFromQueue = (videoId) => {
+    //   setVideosInQueue((prevQueue) => {
+    //     const updatedQueue = prevQueue.map((video) =>
+    //       video.id === videoId ? { ...video, numberInQueue: 0 } : video
+    //     );
+    //     return updatedQueue;
+    //   });
+    // };
+    const removeFromQueue = async (videoId) => {
+      // setVideosInQueue((prevQueue) => {
+        try {
+          // 1. PATCH the removed video to set numberInQueue to 0.
+          const removeResponse = await fetch(`${url}/${videoId}`, {
+            method: 'PATCH',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ numberInQueue: 0 }),
+          });
+      
+          if (!removeResponse.ok) throw new Error('Failed to remove video from queue');
+      
+          // 2. Update local state to reflect the removal.
+          setVideosInQueue((prevQueue) => {
+            const updatedQueue = prevQueue
+              .map((video) =>
+                video.id === videoId ? { ...video, numberInQueue: 0 } : video
+              )
+              .filter((video) => video.numberInQueue > 0);
+      
+            // 3. Reorder remaining videos and update the backend.
+            const reorderedQueue = updatedQueue.map((video, index) => ({
+              ...video,
+              numberInQueue: index + 1,
+            }));
+      
+            updateVideoQueue(reorderedQueue); // This will PATCH the reordered queue.
+      
+            return reorderedQueue;
+          });
+        } catch (error) {
+          console.error('Error removing video from queue:', error);
+        }
       };
-      return colorKey[category] || "gray-400"; // Default
-  };
+
+      const addToQueue = async (video) => {
+        const newPosition = videosInQueue.length + 1;
+      
+        try {
+          const response = await fetch(`${url}/${video.id}`, {
+            method: 'PATCH',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ numberInQueue: newPosition }),
+          });
+      
+          if (!response.ok) throw new Error('Failed to add video to queue');
+      
+          setVideosInQueue((prevQueue) => [
+            ...prevQueue,
+            { ...video, numberInQueue: newPosition },
+          ]);
+        } catch (error) {
+          console.error('Error adding video to queue:', error);
+        }
+      };  
+
+    // const addToQueue = (videoId) => {
+    //   setVideosInQueue((prevQueue) => {
+    //     const updatedQueue = prevQueue.map((video) =>
+    //       video.id === videoId ? { ...video, numberInQueue: findNextAvailableSlot(prevQueue) } : video
+    //     );
+    //     return updatedQueue;  
+    //   });
+    // };
   
-  const handleWatchVideo = (video) => {
-    setCurrentVideo(video);
-    console.log(video);
-    setDisplayVideoLibrary(false);
-  };
+    // const findNextAvailableSlot = (queue) => {
+    //   for (let i = 1; i <= 5; i++) {
+    //     if (!queue.some((video) => video.numberInQueue === i)) {
+    //       return i;
+    //     }
+    //   }
+    //   return 0;  // If the queue is full, return 0 or handle accordingly
+    // };
+
+
+      //   const updatedQueue = prevQueue
+      //     .map((video) =>
+      //     video.id === videoId ? {...video, numberInQueue: 0 } : video
+      //     )
+      //   .filter((video) => video.numberInQueue > 0);
+        
+      // const reorderedQueue = updatedQueue.map((video, index) => ({
+      //   ...video,
+      //   numberInQueue: index + 1,
+      // }));
+      // updateVideoQueue(reorderedQueue);
+
+      // return reorderedQueue;
+        // prevQueue.map((video) =>
+        //   video.id === videoId ? { ...video, numberInQueue: 0 } : video
+        // )
+      // });
+      // Now update the back-end
+      // updateQueue(videoId, 0); // assuming you have a function to update the backend
+    // };
+  
+  // useEffect(() => {
+  //   if (videosInQueue.length > 0) {
+  //     const updatedQueue = videosInQueue.filter(video => video.numberInQueue !== video.originalNumberInQueue);
+  //     if (updatedQueue.length > 0) {
+  //       updateVideoQueue(videosInQueue);
+  //     }
+  //   }
+  // }, [videosInQueue]);
+  // useEffect(() => {
+  //   const videosToUpdate = videosInQueue.filter(
+  //     (video) => video.numberInQueue !== video.originalNumberInQueue
+  //   );
+  
+  //   if (videosToUpdate.length > 0) {
+  //     updateVideoQueue(videosInQueue);
+  //   }
+  // }, [videosInQueue]);
+
+  
 
   const fetchVideos = async () => {
     try {
@@ -128,6 +225,62 @@ const App = () => {
   //   };
 
   
+  const windowSize = useWindowSize();
+
+  useEffect(() => {
+    if (windowSize.width) {
+    const newTailwindSize = determineTailwindSize(windowSize);
+    setTailwindSize(newTailwindSize);
+    }
+  }, [windowSize]);
+
+
+  const determineTailwindSize = (size) => {
+      if (size.width >= 1536) return "2xl";
+      if (size.width >= 1280) return "xl";
+      if (size.width >= 1024) return "lg";
+      if (size.width >= 768) return "md";
+      if (size.width >= 640) return "sm";
+      return "xs";
+  };
+
+  const extractVideoId = (videoLink) => {
+    try {
+      const urlObj = new URL(videoLink);
+      if (urlObj.hostname === 'youtu.be') {
+        return urlObj.pathname.substring(1);
+      } else if (urlObj.hostname === 'www.youtube.com' || urlObj.hostname === 'youtube.com') {
+        return urlObj.searchParams.get('v');
+      }
+      return null;
+    } catch (error) {
+      console.error('Invalid videoLink:', error.message);
+      return null;
+    }
+  }
+  
+  const applyCategoryColor = (category) => {
+    //add any new colors to config file
+      const colorKey = {
+          "Artificial Intelligence": "pink-500",
+          "Back End": "emerald-600",
+          "Data": "blue-600", 
+          "Data S&A": "violet-600",
+          "Front End": "fuchsia-500",
+          "Java": "orange-500",
+          "JavaScript": "amber-400",
+          "Python": "green-500",
+          "React": "cyan-600",
+          "Tailwind": "teal-400",
+      };
+      return colorKey[category] || "gray-400"; // Default
+  };
+  
+  const handleWatchVideo = (video) => {
+    setCurrentVideo(video);
+    console.log(video);
+    setDisplayVideoLibrary(false);
+  };
 
 const handleViewKeywords = (video) => {
     setDisplayKeywords((prevId) => (prevId === video.id ? null : video.id));
@@ -160,34 +313,6 @@ const calculateVideoDuration = (startTime, endTime) => {
 }
 
 
-const updateVideoQueue = async (updatedQueue) => {
-  console.log("Final Queue Order:", updatedQueue);
-
-  try {
-    const updates = updatedQueue.filter(video => video.numberInQueue !== video.originalNumberInQueue);
-    console.log("Videos to update:", updates);
-
-    for (const video of updates) {
-      console.log(`Attempting to update video ID ${video.id} with numberInQueue: ${video.numberInQueue}`);
-
-      const response = await fetch(`${url}/${video.id}`, {
-        method: 'PATCH',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ numberInQueue: video.numberInQueue }),
-      });
-      console.log(`Response for video ID ${video.id}:`, response);
-      if (!response.ok) throw new Error(`Failed to update video with ID: ${video.id}`);
-      console.log(`Fetching: ${url}/${video.id}`);
-      // Update originalNumberInQueue after successful PATCH
-      video.originalNumberInQueue = video.numberInQueue;
-    }
-
-    setVideosInQueue(updatedQueue);
-    console.log("Queue updated successfully.");
-  } catch (error) {
-    console.error('Error updating video queue:', error);
-  }
-};
 
 
 /////////////////// const ItemType = "VIDEO";
@@ -267,7 +392,7 @@ const updateVideoQueue = async (updatedQueue) => {
     {displayVideoLibrary ? (
 
       <div className="bg-gray-600 h-screen w-full">
-          <VideoLibrary videos={videos} fetchVideos={fetchVideos} setVideos={setVideos} displayVideoLibrary={displayVideoLibrary} 
+          <VideoLibrary addToQueue={addToQueue} videos={videos} fetchVideos={fetchVideos} setVideos={setVideos} displayVideoLibrary={displayVideoLibrary} 
           setDisplayVideoLibrary={setDisplayVideoLibrary} url={url} applyCategoryColor={applyCategoryColor} 
           // handleShowAddVideoForm={handleShowAddVideoForm}
           // displayAddVideoForm={displayAddVideoForm}
@@ -308,6 +433,7 @@ const updateVideoQueue = async (updatedQueue) => {
                   extractVideoId={extractVideoId} 
                   calculateVideoDuration={calculateVideoDuration}
                   updateVideoQueue={handleQueueUpdate}
+                  removeFromQueue={removeFromQueue}
                    />
               </div>
             </div>
@@ -333,11 +459,15 @@ const updateVideoQueue = async (updatedQueue) => {
               </div>
 
               <div className="w-1/3 mr-8 -mt-2 ">
-                <QueueSection   videosInQueue={videosInQueue} 
-                setVideosInQueue={setVideosInQueue} 
-                updateVideoQueue={handleQueueUpdate}
-                applyCategoryColor={applyCategoryColor} 
-                      extractVideoId={extractVideoId} calculateVideoDuration={calculateVideoDuration} />
+                <QueueSection   
+                  videosInQueue={videosInQueue} 
+                  setVideosInQueue={setVideosInQueue} 
+                  updateVideoQueue={handleQueueUpdate}
+                  applyCategoryColor={applyCategoryColor} 
+                  extractVideoId={extractVideoId} 
+                  calculateVideoDuration={calculateVideoDuration}
+                  removeFromQueue={removeFromQueue} 
+                  />
               </div>
             </div>
         </div>
@@ -363,7 +493,11 @@ const updateVideoQueue = async (updatedQueue) => {
               </div>
 
               <div className="w-1/3 mr-8 -mt-1 ml-0 h-full">
-                <QueueSection        updateVideoQueue={handleQueueUpdate} videosInQueue={videosInQueue} setVideosInQueue={setVideosInQueue} applyCategoryColor={applyCategoryColor}           extractVideoId={extractVideoId} calculateVideoDuration={calculateVideoDuration} />
+                <QueueSection        updateVideoQueue={handleQueueUpdate} videosInQueue={videosInQueue} 
+                setVideosInQueue={setVideosInQueue} applyCategoryColor={applyCategoryColor}           
+                extractVideoId={extractVideoId} 
+                calculateVideoDuration={calculateVideoDuration} 
+                removeFromQueue={removeFromQueue}/>
               </div>
             </div>
         </div> 
@@ -393,7 +527,8 @@ const updateVideoQueue = async (updatedQueue) => {
             applyCategoryColor={applyCategoryColor}    
             updateVideoQueue={handleQueueUpdate}      
             extractVideoId={extractVideoId} 
-            calculateVideoDuration={calculateVideoDuration} />
+            calculateVideoDuration={calculateVideoDuration} 
+            removeFromQueue={removeFromQueue}/>
             </div>
         </div>
         )
@@ -418,15 +553,13 @@ const updateVideoQueue = async (updatedQueue) => {
 
             <div className="mt-4 mb-4 mx-32 h-[42%]">
 
-                <QueueSection 
-       
-                videosInQueue={videosInQueue} 
-                setVideosInQueue={setVideosInQueue} 
-                applyCategoryColor={applyCategoryColor}           
-                extractVideoId={extractVideoId} 
-                calculateVideoDuration={calculateVideoDuration}
-                updateVideoQueue={handleQueueUpdate}
-                 />
+            <QueueSection  videosInQueue={videosInQueue} 
+            setVideosInQueue={setVideosInQueue} 
+            applyCategoryColor={applyCategoryColor}    
+            updateVideoQueue={handleQueueUpdate}      
+            extractVideoId={extractVideoId} 
+            calculateVideoDuration={calculateVideoDuration}
+            removeFromQueue={removeFromQueue} />
      
             </div>
         </div>
@@ -450,10 +583,15 @@ const updateVideoQueue = async (updatedQueue) => {
       
       
                 <div className="w-full h-[40%]  px-16 mt-6">
-                    <QueueSection
-                      videosInQueue={videosInQueue} 
-                      updateVideoQueue={handleQueueUpdate}
-                      setVideosInQueue={setVideosInQueue} applyCategoryColor={applyCategoryColor}           extractVideoId={extractVideoId} calculateVideoDuration={calculateVideoDuration} />
+                    
+              <QueueSection  videosInQueue={videosInQueue} 
+            setVideosInQueue={setVideosInQueue} 
+            applyCategoryColor={applyCategoryColor}    
+            updateVideoQueue={handleQueueUpdate}      
+            extractVideoId={extractVideoId} 
+            calculateVideoDuration={calculateVideoDuration}
+            removeFromQueue={removeFromQueue} />
+            
             </div>
         </div>
         )}

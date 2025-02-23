@@ -5,7 +5,7 @@ import {useDrop} from 'react-dnd'
 
 
 
-const QueueSection = ({  videosInQueue, updateVideoQueue, setVideosInQueue, applyCategoryColor, extractVideoId, calculateVideoDuration }) => {
+const QueueSection = ({  videosInQueue, removeFromQueue, updateVideoQueue, setVideosInQueue, applyCategoryColor, extractVideoId, calculateVideoDuration }) => {
   
   const [draggedIndex, setDraggedIndex] = useState(null);
 
@@ -30,7 +30,7 @@ const QueueSection = ({  videosInQueue, updateVideoQueue, setVideosInQueue, appl
       video.numberInQueue = index + 1;
     });
 
-    setVideosInQueue(updatedQueue); // Only update UI
+    setVideosInQueue(updatedQueue); 
   };
 
   const [, drop] = useDrop({
@@ -75,7 +75,7 @@ const QueueSection = ({  videosInQueue, updateVideoQueue, setVideosInQueue, appl
 
   return (
   <div className="w-full h-full">
-      <div className="relative h-12 -mb-6 w-2/3 flex mx-auto items-center inset-0.5 bg-gradient-to-r from-yellow-300 to-green-500 rounded-lg z-10">
+      <div className="relative h-12 -mb-6 w-2/3 flex mx-auto items-center inset-0.5 bg-gradient-to-r from-yellow-300 to-green-500 rounded-lg z-10 overflow-hidden">
           <div className="absolute lg:py-4 inset-0.5 text-xl sm:2xl 2xl:text-3xl bg-gray-800 rounded-lg flex items-center justify-center font-extrabold tracking-widest text-green-400">
             QUEUE
           </div> 
@@ -97,6 +97,7 @@ const QueueSection = ({  videosInQueue, updateVideoQueue, setVideosInQueue, appl
                       extractVideoId={extractVideoId}
                       applyCategoryColor={applyCategoryColor}
                       calculateVideoDuration={calculateVideoDuration}
+                      removeFromQueue={removeFromQueue}
                       />
               ))}
           </div>

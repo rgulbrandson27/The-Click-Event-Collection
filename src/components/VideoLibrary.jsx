@@ -6,7 +6,7 @@ import ColorPalette from './ColorPalette';
 import ColorKey from './ColorKey';
 
 
-const VideoLibrary = ( {videos, fetchVideos, setVideos, displayVideoLibrary, setDisplayVideoLibrary, url, applyCategoryColor, extractVideoId, 
+const VideoLibrary = ( {videos, addToQueue, fetchVideos, setVideos, displayVideoLibrary, setDisplayVideoLibrary, url, applyCategoryColor, extractVideoId, 
   calculateVideoDuration, handleWatchVideo, handleAddToQueue, handleViewKeywords, setDisplayKeywords, 
   displayKeywords } ) => {
 
@@ -93,6 +93,7 @@ const VideoLibrary = ( {videos, fetchVideos, setVideos, displayVideoLibrary, set
                     handleViewKeywords={handleViewKeywords}
                     displayKeywords={displayKeywords}
                     setDisplayKeywords={setDisplayKeywords}
+                    addToQueue={addToQueue}
                     />
                 ))};
             </div>

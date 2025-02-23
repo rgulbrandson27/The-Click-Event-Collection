@@ -25,18 +25,19 @@ const VideoInfoCard = ( {
     extractVideoId,
     calculateVideoDuration,
     handleWatchVideo,
-    handleAddToQueue,
+    addToQueue,
     handleViewKeywords,
-    displayKeyWords,
-    setDisplayKeywords
     } ) => {
-
         const videoEmbeddedNumber = extractVideoId(videoLink); 
         const videoLength = calculateVideoDuration(startTime, endTime);
         const thumbnailUrl = videoEmbeddedNumber
           ? `https://img.youtube.com/vi/${videoEmbeddedNumber}/hqdefault.jpg`
           : 'https://via.placeholder.com/160x90?text=No+Thumbnail'; 
       console.log(videoLength)
+
+    const handleAddToQueue = () => {
+      addToQueue(video);
+    };
 
     return (
       <>
@@ -62,7 +63,7 @@ const VideoInfoCard = ( {
                       <p className="text-lg text-gray-800 tracking-wide hover:underline hover:scale-105">Watch Now</p>
                   </div>
                   <div className="flex flex-rows hover:underline cursor-pointer hover:scale-105" 
-                    onClick={()=> handleAddToQueue()}>
+                    onClick={()=> handleAddToQueue(video)}>
                       <img className="mt-[4px] py-0.5 text-sm h-6 w-10 mr-3 opacity-75 -ml-1 transform -scale-x-100" src={queueicon} alt="TV Icon" />
                       <p className="text-lg text-gray-800 tracking-wide hover:underline ">Add to Queue</p>
                   </div>
