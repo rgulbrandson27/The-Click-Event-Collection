@@ -17,14 +17,13 @@ const App = () => {
   const [currentVideo, setCurrentVideo] = useState('');
   const [displayKeywords, setDisplayKeywords] = useState(false);
   const [videosInQueue, setVideosInQueue] = useState([]);
-  const [updatedVideoList, setUpdatedVideoList] = useState('')
+
   
   useEffect(() => {
     fetchVideos(); 
   }, []);
 
   const updateVideoQueue = async (updatedQueue) => {
-    console.log("Final Queue Order:", updatedQueue);
   
     try {
       const updates = updatedQueue.filter(video => video.numberInQueue !== video.originalNumberInQueue);
@@ -95,26 +94,105 @@ const App = () => {
         }
       };
 
-      const addToQueue = async (video) => {
-        const newPosition = videosInQueue.length + 1;
+
+
+
+  const addToQueue = async (video) => {
+    const newPosition = videosInQueue.length + 1;
+
+  try {
+    const response = await fetch(`${url}/${video.id}`, {
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ numberInQueue: newPosition }),
+    });
+
+    if (!response.ok) throw new Error('Failed to add video to queue');
+    setDisplayVideoLibrary(false);
+    setVideosInQueue((prevQueue) => [
+      ...prevQueue,
+      { ...video, numberInQueue: newPosition },
+    ]);
+  } catch (error) {
+    console.error('Error adding video to queue:', error);
+  }
+};
+
+        // if (videosInQueue.length >= 5) {
+        //   setVideoToAdd(video);
+        //   setShowReplaceModal(true);
+        // } else {
+        //   addToQueue(video);
+        // }
+        // }
+        //   const newPosition = videosInQueue.length + 1;
       
-        try {
-          const response = await fetch(`${url}/${video.id}`, {
-            method: 'PATCH',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ numberInQueue: newPosition }),
-          });
+        //   try {
+        //     const response = await fetch(`${url}/${video.id}`, {
+        //       method: 'PATCH',
+        //       headers: { 'Content-Type': 'application/json' },
+        //       body: JSON.stringify({ numberInQueue: newPosition }),
+        //     });
+        
+        //     if (!response.ok) throw new Error('Failed to add video to queue');
+        
+        //     setVideosInQueue((prevQueue) => [
+        //       ...prevQueue,
+        //       { ...video, numberInQueue: newPosition },
+        //     ]);
+        //   } catch (error) {
+        //     console.error('Error adding video to queue:', error);
+        //   }
+        // };
+
+          // const confirmReplace = window.confirm(
+          //   'The queue is full. Would you like to replace the last queued video with this one?'
+          // );
+          // if (!confirmReplace) {
+          //   console.log('User canceled the replacement.');
+          //   return; // Exit without adding the video
+          // }
+
+
+
+          const handleReplaceVideo = async () => {
+            if (!videoToAdd) return;
+          const lastVideo = videosInQueue[videosInQueue.length - 1];
+          try {
+            // Set the last video to numberInQueue: 0 (remove it)
+            await fetch(`${url}/${lastVideo.id}`, {
+              method: 'PATCH',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ numberInQueue: 0 }),
+            }); 
+
+            const response = await fetch(`${url}/${videoToAdd.id}`, {
+              method: 'PATCH',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ numberInQueue: 5 }),
+            });
+            if (!response.ok) throw new Error('Failed to add video to queue');
+
+            // Update the queue state
+            setVideosInQueue((prevQueue) => [
+              ...prevQueue.slice(0, 4), // Keep the first 4 videos
+              { ...videoToAdd, numberInQueue: 5 }, // Add the new video as the last one
+            ]);
+
+            setShowReplaceModal(false);
+    setVideoToAdd(null);
+  } catch (error) {
+    console.error('Error replacing video in queue:', error);
+  }
+};
+      //     } catch (error) {
+      //       console.error('Error replacing video in queue:', error);
+      //     }
       
-          if (!response.ok) throw new Error('Failed to add video to queue');
-      
-          setVideosInQueue((prevQueue) => [
-            ...prevQueue,
-            { ...video, numberInQueue: newPosition },
-          ]);
-        } catch (error) {
-          console.error('Error adding video to queue:', error);
-        }
-      };  
+      //     return;
+      //   }
+   
+      // };  
 
     // const addToQueue = (videoId) => {
     //   setVideosInQueue((prevQueue) => {
@@ -393,12 +471,13 @@ const calculateVideoDuration = (startTime, endTime) => {
 
       <div className="bg-gray-600 h-screen w-full">
           <VideoLibrary addToQueue={addToQueue} videos={videos} fetchVideos={fetchVideos} setVideos={setVideos} displayVideoLibrary={displayVideoLibrary} 
-          setDisplayVideoLibrary={setDisplayVideoLibrary} url={url} applyCategoryColor={applyCategoryColor} 
+          setDisplayVideoLibrary={setDisplayVideoLibrary} url={url} applyCategoryColor={applyCategoryColor} removeFromQueue={removeFromQueue}
           // handleShowAddVideoForm={handleShowAddVideoForm}
           // displayAddVideoForm={displayAddVideoForm}
           extractVideoId={extractVideoId} calculateVideoDuration={calculateVideoDuration}
           handleWatchVideo={handleWatchVideo}  handleViewKeywords={handleViewKeywords} 
-          displayKeywords={displayKeywords} setDisplayKeywords={setDisplayKeywords} 
+          displayKeywords={displayKeywords} setDisplayKeywords={setDisplayKeywords} videosInQueue={videosInQueue}
+          updateVideoQueue={updateVideoQueue}
           // handleCancel={handleCancel}
           />  
       </div>      

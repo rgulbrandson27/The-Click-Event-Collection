@@ -6,13 +6,48 @@ import ColorPalette from './ColorPalette';
 import ColorKey from './ColorKey';
 
 
-const VideoLibrary = ( {videos, addToQueue, fetchVideos, setVideos, displayVideoLibrary, setDisplayVideoLibrary, url, applyCategoryColor, extractVideoId, 
-  calculateVideoDuration, handleWatchVideo, handleAddToQueue, handleViewKeywords, setDisplayKeywords, 
+const VideoLibrary = ( {videos, addToQueue, fetchVideos, setVideos, 
+  displayVideoLibrary, setDisplayVideoLibrary, url, applyCategoryColor, 
+  extractVideoId, removeFromQueue,
+  calculateVideoDuration, handleWatchVideo, handleAddToQueue, handleViewKeywords, 
+  setDisplayKeywords, videosInQueue, updateVideoQueue,
   displayKeywords } ) => {
 
     const [displayColorKey, setDisplayColorKey] = useState(false);
     const [displayAddVideoForm, setDisplayAddVideoForm] = useState(false);
+    const [showReplaceModal, setShowReplaceModal] = useState(false);
+    const [videoToAdd, setVideoToAdd] = useState(null);
+
+    const handleReplace = async () => {
+      // if (!videoToAdd) return;
     
+      try {
+        if (lastVideoInQueue) {
+          await removeFromQueue(lastVideoInQueue.id);
+        }
+        await addToQueue(videoToAdd);
+        
+ 
+    const updatedQueue = [...videosInQueue.filter(v => v.id !== lastVideoInQueue?.id), { ...videoToAdd, numberInQueue: 5 }];
+    await updateVideoQueue(updatedQueue);
+
+
+        setShowReplaceModal(false);
+        setVideoToAdd(null);
+      } catch (error) {
+        console.error('Failed to replace video:', error);
+      }
+    };
+      
+          
+    const lastVideoInQueue = videosInQueue[4] ?? null;
+    
+    const videoNum = lastVideoInQueue?.videoLink ? extractVideoId(lastVideoInQueue.videoLink) : null;
+    
+    const newVideoNum = videoToAdd?.videoLink ? extractVideoId(videoToAdd.videoLink) : null;
+   
+    const category = lastVideoInQueue ? lastVideoInQueue.category : null;
+
 
     useEffect(() => {
       fetchVideos();
@@ -22,9 +57,17 @@ const VideoLibrary = ( {videos, addToQueue, fetchVideos, setVideos, displayVideo
       setDisplayColorKey((prev) => !prev);
     };
     
-    const handleShowAddVideoForm = () => {
+    const handleShowAddVideoForm = () => { 
       setDisplayAddVideoForm(true);
     }
+
+    const smallThumbnailUrl = videoNum
+    ? `https://img.youtube.com/vi/${videoNum}/hqdefault.jpg`
+    : 'https://via.placeholder.com/160x90?text=No+Thumbnail'; 
+
+    const newSmallThumbnailUrl = newVideoNum
+    ? `https://img.youtube.com/vi/${newVideoNum}/hqdefault.jpg`
+    : 'https://via.placeholder.com/160x90?text=No+Thumbnail'; 
 
     return  (
     <div className="bg-gray-800 w-full h-full p-4 lg:p-12 -xl:m-2">
@@ -38,6 +81,67 @@ const VideoLibrary = ( {videos, addToQueue, fetchVideos, setVideos, displayVideo
           < ColorKey displayColorKey={displayColorKey} setDisplayColorKey={setDisplayColorKey} handleShowColorKey={handleShowColorKey}/>
         </div>
       </div>
+
+                  
+      {showReplaceModal && (
+  <div className="fixed -mt-56 inset-0 bg-black bg-opacity-60 flex items-center justify-center z-50">
+    <div className="bg-white rounded-xl shadow-xl p-6 w-[400px] text-center">
+      <h2 className="text-2xl font-bold text-red-800 mb-4">Queue is Full</h2>
+      <p className="text-gray-700 mb-4 text-xl">
+        Would you like to replace this video?  
+      </p>
+      <div className={`bg-gray-600 opacity-70 h-36 mb-4 w-full py-2 flex flex-col items-center border-s-8 rounded-r-2xl border-l-${applyCategoryColor(lastVideoInQueue?.category)}`}>
+      <p className="text-md lg:w-2/3 mx-2 mb-2 text-pretty truncate text-gray-300"> {lastVideoInQueue?.videoTitle}</p>
+      <img
+        src={ smallThumbnailUrl } 
+        alt="YouTube Thumbnail"
+        className="block w-1/3 shadow-xl aspect-video object-cover rounded-md mr-2"
+      /> 
+      </div>
+      <p className="text-gray-700 mb-4 mt-10 text-xl">
+        With the one you selected?  
+      </p>
+      <div className={`bg-gray-500 h-36 mb-4 w-full py-2 flex flex-col items-center border-s-8 rounded-r-2xl border-l-${applyCategoryColor(videoToAdd?.category)}`}>
+      <p className="text-md lg:w-2/3 mx-2 my-1 text-pretty truncate text-gray-300"> {videoToAdd?.videoTitle}</p>
+      <img
+        src={ newSmallThumbnailUrl } 
+        alt="YouTube Thumbnail"
+        className="block w-1/3 shadow-xl aspect-video object-cover rounded-md mr-2"
+      /> 
+
+      
+      </div>
+      <div className="flex justify-center mt-2 gap-4">
+        <button
+        onClick={handleReplace}
+          // onClick={async () => {
+          //   if (lastVideoInQueue) {
+          //     await removeFromQueue(lastVideoInQueue.id);
+          //   }
+          //   await 
+          //     addToQueue(videoToAdd);  
+          //   setShowReplaceModal(false);
+          //   setVideoToAdd(null);
+      
+          // }}
+          className="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded-lg"
+        >
+          Replace
+        </button>
+        <button
+          onClick={() => {
+            setShowReplaceModal(false);
+            setVideoToAdd(null);
+          }}
+          className="bg-gray-400 hover:bg-gray-500 text-white font-bold py-2 px-4 rounded-lg"
+        >
+          Cancel
+        </button>
+      </div>
+    </div>
+  </div>
+)}
+
 
         { displayAddVideoForm ? ( 
                 <div className="w-full flex justify-center xl:p-1">
@@ -94,6 +198,11 @@ const VideoLibrary = ( {videos, addToQueue, fetchVideos, setVideos, displayVideo
                     displayKeywords={displayKeywords}
                     setDisplayKeywords={setDisplayKeywords}
                     addToQueue={addToQueue}
+                    videosInQueue={videosInQueue}
+                    setVideoToAdd={setVideoToAdd}
+                    videoToAdd={videoToAdd}
+                    setShowReplaceModal={setShowReplaceModal}
+                    removeFromQueue={removeFromQueue}
                     />
                 ))};
             </div>

@@ -27,7 +27,14 @@ const VideoQueueCard = ( { video, removeFromQueue, index, moveCard, updateVideoQ
     setTimeout(() => removeFromQueue(videoId), 300);
   };
 
-
+  const handleAddToQueue = (video) => {
+    if (videos.filter((v) => v.numberInQueue > 0).length >= 5) {
+      setVideoToAdd(video);
+      setShowReplaceModal(true);
+    } else {
+      addToQueue(video);
+    }
+  };
   const [{ isOver }, drop] = useDrop({    //useDrop isn't about the "drop", it tracks where the item is relative to all of the potential drop targets
     accept: 'VIDEO',                      // and it consistently runs locally as its being dragged.  
     hover: (draggedItem) => {             // continually calling the hover function.
