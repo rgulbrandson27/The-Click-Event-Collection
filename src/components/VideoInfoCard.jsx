@@ -38,27 +38,6 @@ const VideoInfoCard = ( {
           : 'https://via.placeholder.com/160x90?text=No+Thumbnail'; 
       console.log(videoLength)
 
-    // const handleAddToQueue = () => {
-    //   addToQueue(video);
-    // };
-    // const handleAddToQueue = (video) => {
-    //   if (videos.filter((v) => v.numberInQueue > 0).length >= 5) {
-    //     setVideoToAdd(video);
-    //     setShowReplaceModal(true);
-    //   } else {
-    //     addToQueue(video);
-    //   }
-    // };
-
-    // const handleAddToQueue = (video) => {
-    //   if ({videosInQueue}.length >= 5) {
-    //     setVideoToAdd(video);
-    //     setShowReplaceModal(true);
-    //   } else {
-    //     addToQueue(video);
-    //   }
-    // };
-
     const handleAddToQueue = (video) => {
       if (videosInQueue.length >= 5) {
         setVideoToAdd(video);

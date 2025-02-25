@@ -4,16 +4,17 @@ import VideoInfoCard from './VideoInfoCard';
 import AddVideoForm from './AddVideoForm';
 import ColorPalette from './ColorPalette';
 import ColorKey from './ColorKey';
+import Key from './Key';
 
 
 const VideoLibrary = ( {videos, addToQueue, fetchVideos, setVideos, 
   displayVideoLibrary, setDisplayVideoLibrary, url, applyCategoryColor, 
   extractVideoId, removeFromQueue,
   calculateVideoDuration, handleWatchVideo, handleAddToQueue, handleViewKeywords, 
-  setDisplayKeywords, videosInQueue, updateVideoQueue,
+  setDisplayKeywords, videosInQueue, updateVideoQueue, handleShowColorKey, displayColorKey, setDisplayColorKey,
   displayKeywords } ) => {
 
-    const [displayColorKey, setDisplayColorKey] = useState(false);
+
     const [displayAddVideoForm, setDisplayAddVideoForm] = useState(false);
     const [showReplaceModal, setShowReplaceModal] = useState(false);
     const [videoToAdd, setVideoToAdd] = useState(null);
@@ -30,8 +31,6 @@ const VideoLibrary = ( {videos, addToQueue, fetchVideos, setVideos,
  
     const updatedQueue = [...videosInQueue.filter(v => v.id !== lastVideoInQueue?.id), { ...videoToAdd, numberInQueue: 5 }];
     await updateVideoQueue(updatedQueue);
-
-
         setShowReplaceModal(false);
         setVideoToAdd(null);
       } catch (error) {
@@ -39,7 +38,6 @@ const VideoLibrary = ( {videos, addToQueue, fetchVideos, setVideos,
       }
     };
       
-          
     const lastVideoInQueue = videosInQueue[4] ?? null;
     
     const videoNum = lastVideoInQueue?.videoLink ? extractVideoId(lastVideoInQueue.videoLink) : null;
@@ -48,14 +46,9 @@ const VideoLibrary = ( {videos, addToQueue, fetchVideos, setVideos,
    
     const category = lastVideoInQueue ? lastVideoInQueue.category : null;
 
-
     useEffect(() => {
       fetchVideos();
     }, []); 
-
-    const handleShowColorKey = () => {
-      setDisplayColorKey((prev) => !prev);
-    };
     
     const handleShowAddVideoForm = () => { 
       setDisplayAddVideoForm(true);
@@ -74,15 +67,18 @@ const VideoLibrary = ( {videos, addToQueue, fetchVideos, setVideos,
       <div className="w-full bg-gray-800 h-14 mb-4 relative">
         <h1 className="text-center text-5xl text-yellow-200 mb-6 justify-center">Video Library</h1>
         <div className = "absolute h-full top-0 right-4 p-3 flex">
-          < ColorPalette 
-            handleShowColorKey={handleShowColorKey}  />
+          <p className="text-xl text-violet-500 hover:text-violet-400 hover:cursor-pointer hover:underline mr-6"
+          onClick={() => setDisplayVideoLibrary(false)}
+          >Main</p>
+          < Key handleShowColorKey={handleShowColorKey}  />
         </div>
         <div >
           < ColorKey displayColorKey={displayColorKey} setDisplayColorKey={setDisplayColorKey} handleShowColorKey={handleShowColorKey}/>
         </div>
       </div>
 
-                  
+
+          
       {showReplaceModal && (
   <div className="fixed -mt-56 inset-0 bg-black bg-opacity-60 flex items-center justify-center z-50">
     <div className="bg-white rounded-xl shadow-xl p-6 w-[400px] text-center">

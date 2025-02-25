@@ -6,6 +6,7 @@ import React, { useState, useEffect } from 'react'
 const ColorPalette = ( { handleShowColorKey}) => {
 
     return (
+  
        <div className="h-full w-full relative hover:transform cursor-pointer"
             onClick={handleShowColorKey}> 
             <svg version="1.1" xmlns="http://www.w3.org/2000/svg" 

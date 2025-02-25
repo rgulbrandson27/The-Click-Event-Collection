@@ -1,14 +1,24 @@
 import React, { useEffect, useState } from "react";
 import YouTube from 'react-youtube';
-// import "./VideoBar.css";
-// import { Pi } from "react-icons/pi";
-
 
 const YouTubeVideo = ( {currentVideo, extractVideoId} ) => {
 
   // const videoId = 'TJcHyfzkXf4';
 
+  // useEffect(() => {
+  //   if (!currentVideo && videosInQueue) {
+  //     const defaultVideoInQueue = videosInQueue.find(video => video.numberInQueue === 1);
+  //     if (defaultVideoInQueue) {
+  //       setDefaultVideo(defaultVideoInQueue);
+  //     }
+  //   }
+  // }, [currentVideo, videosInQueue]);
 
+  // const videoId =
+  // (currentVideo || defaultVideo) && (currentVideo.videoLink || defaultVideo.videoLink)
+  //   ? extractVideoId((currentVideo || defaultVideo).videoLink)
+  //   : null;
+  
   const videoId =
   currentVideo && currentVideo.videoLink
     ? extractVideoId(currentVideo.videoLink)
@@ -18,7 +28,6 @@ const YouTubeVideo = ( {currentVideo, extractVideoId} ) => {
 
     width: '100%',
     height: '100%',
-
     playerVars: {
       autoplay: 0, // override default
       rel: 0, //override default - set here to not show related videos
@@ -27,17 +36,15 @@ const YouTubeVideo = ( {currentVideo, extractVideoId} ) => {
   };
 
   const onReady = (event) => {
-    event.target.pauseVideo(); // Pause the video when it's ready
+    event.target.pauseVideo(); 
   };
  console.log(videoId);
   return (
-    // <div className="youtube-container rounded-md aspect-video overflow-hidden">
-    // <div className="rounded-md flex w-full h-full overflow-hidden">
-      // <div className="w-full h-full bg-yellow-400">
       <YouTube 
       videoId={videoId}
-      opts={opts} onReady={onReady} className="aspect-video rounded-md overflow-hidden"/>
-    // </div>
+      opts={opts} 
+      onReady={onReady} 
+      className="aspect-video rounded-md overflow-hidden"/>
   )
 };
 
