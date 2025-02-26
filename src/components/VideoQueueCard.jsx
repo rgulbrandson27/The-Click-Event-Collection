@@ -3,7 +3,7 @@ import {useDrag, useDrop } from 'react-dnd'
 import remove from '../assets/remove.png'
 import { ExclamationTriangleIcon } from '@heroicons/react/24/outline'
 
-const VideoQueueCard = ( { video, removeFromQueue, index, moveCard, updateVideoQueue, applyCategoryColor, extractVideoId, calculateVideoDuration, videosInQueue  }) => {
+const VideoQueueCard = ( { video, fadeOut, setFadeOut, removeFromQueue, index, moveCard, updateVideoQueue, applyCategoryColor, extractVideoId, calculateVideoDuration, videosInQueue  }) => {
 
   const [isRemoving, setIsRemoving] = useState(false);
   const videoNum = extractVideoId(video.videoLink); 

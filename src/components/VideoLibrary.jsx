@@ -18,9 +18,9 @@ const VideoLibrary = ( {videos, addToQueue, fetchVideos, setVideos,
     const [displayAddVideoForm, setDisplayAddVideoForm] = useState(false);
     const [showReplaceModal, setShowReplaceModal] = useState(false);
     const [videoToAdd, setVideoToAdd] = useState(null);
-
+    const [displayAlreadyInQueue, setDisplayAlreadyInQueue] = useState(false);
+    
     const handleReplace = async () => {
-      // if (!videoToAdd) return;
     
       try {
         if (lastVideoInQueue) {
@@ -37,6 +37,7 @@ const VideoLibrary = ( {videos, addToQueue, fetchVideos, setVideos,
         console.error('Failed to replace video:', error);
       }
     };
+    
       
     const lastVideoInQueue = videosInQueue[4] ?? null;
     
@@ -77,8 +78,18 @@ const VideoLibrary = ( {videos, addToQueue, fetchVideos, setVideos,
         </div>
       </div>
 
-
-          
+      {displayAlreadyInQueue && (
+          <div className={`fixed inset-0 bg-gray-800 -mt-24 flex items-center place-self-center justify-center z-50 w-[400px] h-[260px] p-2 rounded-xl transition-opacity ease-out duration-1000 ${
+            displayAlreadyInQueue ? "opacity-100" : "opacity-0"
+          }`}
+        >
+          {/* "opacity-100 duration-100 fixed -mt-24 inset-0 bg-gray-800 flex items-center place-self-center justify-center z-50 w-[400px] h-[260px] p-2 rounded-xl"> */}
+            <div className="bg-white rounded-xl shadow-xl p-6 text-center h-full">
+                <h2 className="mx-2 text-3xl font-bold text-teal-800 mt-12">This Video is Already In the Queue</h2>
+            </div>
+        </div>
+        )}
+ 
       {showReplaceModal && (
   <div className="fixed -mt-56 inset-0 bg-black bg-opacity-60 flex items-center justify-center z-50">
     <div className="bg-white rounded-xl shadow-xl p-6 w-[400px] text-center">
@@ -104,8 +115,6 @@ const VideoLibrary = ( {videos, addToQueue, fetchVideos, setVideos,
         alt="YouTube Thumbnail"
         className="block w-1/3 shadow-xl aspect-video object-cover rounded-md mr-2"
       /> 
-
-      
       </div>
       <div className="flex justify-center mt-2 gap-4">
         <button
@@ -199,6 +208,7 @@ const VideoLibrary = ( {videos, addToQueue, fetchVideos, setVideos,
                     videoToAdd={videoToAdd}
                     setShowReplaceModal={setShowReplaceModal}
                     removeFromQueue={removeFromQueue}
+                    setDisplayAlreadyInQueue={setDisplayAlreadyInQueue}
                     />
                 ))};
             </div>

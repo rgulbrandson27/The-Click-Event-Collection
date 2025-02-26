@@ -25,10 +25,11 @@ const VideoInfoCard = ( {
     extractVideoId,
     calculateVideoDuration,
     handleWatchVideo,
-    removeFromQueue,
+    fadeOut, 
+    setFadeOut,
     addToQueue,
     handleViewKeywords,
-    videosInQueue, videoToAdd, setVideoToAdd, setShowReplaceModal
+    videosInQueue, videoToAdd, setVideoToAdd, setShowReplaceModal, setDisplayAlreadyInQueue,
     } ) => {
       console.log("VIDEOS:", videosInQueue);
         const videoEmbeddedNumber = extractVideoId(videoLink); 
@@ -37,14 +38,22 @@ const VideoInfoCard = ( {
           ? `https://img.youtube.com/vi/${videoEmbeddedNumber}/hqdefault.jpg`
           : 'https://via.placeholder.com/160x90?text=No+Thumbnail'; 
       console.log(videoLength)
-
+    
     const handleAddToQueue = (video) => {
+      const videoExistsInQueue = videosInQueue.some((queuedVideo) => queuedVideo.id === video.id);
+      if (videoExistsInQueue) {
+        setDisplayAlreadyInQueue(true);
+
+        setTimeout(() => { setDisplayAlreadyInQueue(false);
+      }, 2000);
+        return;
+      }
       if (videosInQueue.length >= 5) {
         setVideoToAdd(video);
         setShowReplaceModal(true);
-      } else {
-        addToQueue(video); 
+        return;
       }
+        addToQueue(video); 
     };
 
     return (
@@ -87,25 +96,19 @@ const VideoInfoCard = ( {
                       <li className="text-gray-500" key={index}>{keyword}</li>
                     ))}
                   </ul>
-
-
                 </div>
               </div>
-
                 <div className="w-2/5 h-full flex flex-col">
                 <div className="ml-5">
                 <img
                       src={thumbnailUrl} 
                       alt="YouTube Thumbnail"
                       className="w-full shadow-xl aspect-video object-cover rounded-lg mt-2"
-                     
                     /> 
                     <p className="text-gray-600 text-center mt-4 tracking-wider">{videoLength}</p>
                 </div>
                 </div>
-      
             </div>
-        
           </div>
       </>
     )

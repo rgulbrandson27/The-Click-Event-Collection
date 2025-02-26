@@ -6,7 +6,7 @@ const ColorKey = ( { displayColorKey, setDisplayColorKey, handleShowColorKey } )
 
     return (
       // <div className="drawer drawer-end">
-   <div className={` fixed top-20 shadow-inner right-0 bg-gray-300 w-64 transform rounded-xl rounded-r-none
+   <div className={` fixed top-20 lg:top-28 shadow-inner right-0 bg-gray-300 w-64 transform rounded-xl rounded-r-none
      border-gray-600 border-l-8 ${
       displayColorKey ? 'translate-x-0' : 'translate-x-full'
     } transition-transform duration-300`}

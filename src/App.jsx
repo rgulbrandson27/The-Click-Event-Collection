@@ -19,6 +19,7 @@ const App = () => {
   const [videosInQueue, setVideosInQueue] = useState([]);
   const [displayColorKey, setDisplayColorKey] = useState(false);
   const [queueOverride, setQueueOverride] = useState(false);
+  const [displayAlreadyInQueueModal, setdisplayAlreadyInQueueModal] = useState(false);
 
   useEffect(() => {
     fetchVideos(); 
@@ -88,6 +89,11 @@ const App = () => {
       };
 
   const addToQueue = async (video) => {
+    const videoExistsInQueue = videosInQueue.some((queuedVideo) => queuedVideo.id === video.id);
+    if (videoExistsInQueue) {
+    setdisplayAlreadyInQueueModal(true);
+    return;
+      }
     const newPosition = videosInQueue.length + 1;
 
   try {
@@ -216,10 +222,6 @@ const App = () => {
       return colorKey[category] || "gray-400"; // Default
   };
   
-
-
-
-
 const handleViewKeywords = (video) => {
     setDisplayKeywords((prevId) => (prevId === video.id ? null : video.id));
   }
