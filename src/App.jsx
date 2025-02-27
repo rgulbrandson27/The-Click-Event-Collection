@@ -20,6 +20,7 @@ const App = () => {
   const [displayColorKey, setDisplayColorKey] = useState(false);
   const [queueOverride, setQueueOverride] = useState(false);
   const [displayAlreadyInQueueModal, setdisplayAlreadyInQueueModal] = useState(false);
+  const [videoToDelete, setVideoToDelete] = useState(null);
 
   useEffect(() => {
     fetchVideos(); 
@@ -163,6 +164,31 @@ const App = () => {
     }
   };
 
+
+  const deleteVideo = async (videoId) => {
+    try {
+      // Make a DELETE request to the backend
+      const response = await fetch(`${url}/${videoToDelete.id}`, {
+        method: 'DELETE',
+      });
+  
+      if (!response.ok) {
+        throw new Error('Failed to delete the video');
+      }
+  
+      // Optionally, refetch the videos after deleting, or you can update the state directly
+      fetchVideos(); // This will refresh the list of videos
+  
+      // Alternatively, to avoid refetching, you can directly remove the video from the state:
+      // setVideos(prevVideos => prevVideos.filter(video => video.id !== videoId));
+      // setVideosInQueue(prevQueue => prevQueue.filter(video => video.id !== videoId));
+      
+      console.log("Video deleted successfully");
+    } catch (error) {
+      console.error("Error deleting video:", error);
+    }
+  };
+
   const filterAndSortVideosForQueue = (videos) => {
     return videos
       .filter(video => video.numberInQueue >= 1 && video.numberInQueue <=5)
@@ -287,7 +313,7 @@ const calculateVideoDuration = (startTime, endTime) => {
           extractVideoId={extractVideoId} calculateVideoDuration={calculateVideoDuration}
           handleWatchVideo={handleWatchVideo}  handleViewKeywords={handleViewKeywords} displayColorKey={displayColorKey} setDisplayColorKey={setDisplayColorKey}
           displayKeywords={displayKeywords} setDisplayKeywords={setDisplayKeywords} videosInQueue={videosInQueue}
-          updateVideoQueue={updateVideoQueue}
+          updateVideoQueue={updateVideoQueue} deleteVideo={deleteVideo} videoToDelete={videoToDelete} setVideoToDelete={setVideoToDelete}
           />  
       </div>      
     ) : (

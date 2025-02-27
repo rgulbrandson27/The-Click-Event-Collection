@@ -6,19 +6,19 @@ import ColorPalette from './ColorPalette';
 import ColorKey from './ColorKey';
 import Key from './Key';
 
-
 const VideoLibrary = ( {videos, addToQueue, fetchVideos, setVideos, 
   displayVideoLibrary, setDisplayVideoLibrary, url, applyCategoryColor, 
   extractVideoId, removeFromQueue,
   calculateVideoDuration, handleWatchVideo, handleAddToQueue, handleViewKeywords, 
   setDisplayKeywords, videosInQueue, updateVideoQueue, handleShowColorKey, displayColorKey, setDisplayColorKey,
-  displayKeywords } ) => {
-
+  displayKeywords, deleteVideo, videoToDelete, setVideoToDelete } ) => {
 
     const [displayAddVideoForm, setDisplayAddVideoForm] = useState(false);
     const [showReplaceModal, setShowReplaceModal] = useState(false);
     const [videoToAdd, setVideoToAdd] = useState(null);
     const [displayAlreadyInQueue, setDisplayAlreadyInQueue] = useState(false);
+    const [displayDeleteModal, setDisplayDeleteModal] = useState(false);
+    // const [videoToDelete, setVideoToDelete] = useState(null);
     
     const handleReplace = async () => {
     
@@ -37,8 +37,9 @@ const VideoLibrary = ( {videos, addToQueue, fetchVideos, setVideos,
         console.error('Failed to replace video:', error);
       }
     };
-    
       
+
+
     const lastVideoInQueue = videosInQueue[4] ?? null;
     
     const videoNum = lastVideoInQueue?.videoLink ? extractVideoId(lastVideoInQueue.videoLink) : null;
@@ -89,6 +90,23 @@ const VideoLibrary = ( {videos, addToQueue, fetchVideos, setVideos,
             </div>
         </div>
         )}
+
+      {displayDeleteModal && (
+          <div className="fixed inset-0 bg-gray-800 -mt-32 flex items-center place-self-center justify-center z-50 w-[400px] h-[280px] p-2 rounded-xl">
+            <div className="bg-white rounded-xl shadow-xl px-3 p-2 pt-5 text-center h-full">
+                <h2 className="mx-2 text-2xl font-bold text-gray-800 mt-2">Are you sure you want to delete this video?</h2>
+                <h3 className="mx-2 text-xl font-bold text-red-800 mt-4 mb-7">All content will be deleted.</h3> 
+                <button className="bg-gray-200 hover:bg-red-800 text-red-800 text-lg border-solid border-red-800 border-4 hover:text-white mb-2 font-bold py-2 px-4 rounded-lg"
+                 onClick={() => {
+                  deleteVideo(videoToDelete);
+                  setDisplayDeleteModal(false);
+                 }}
+              >
+              Confirm Delete
+            </button>
+          </div>
+          </div>
+        )}
  
       {showReplaceModal && (
   <div className="fixed -mt-56 inset-0 bg-black bg-opacity-60 flex items-center justify-center z-50">
@@ -119,16 +137,6 @@ const VideoLibrary = ( {videos, addToQueue, fetchVideos, setVideos,
       <div className="flex justify-center mt-2 gap-4">
         <button
         onClick={handleReplace}
-          // onClick={async () => {
-          //   if (lastVideoInQueue) {
-          //     await removeFromQueue(lastVideoInQueue.id);
-          //   }
-          //   await 
-          //     addToQueue(videoToAdd);  
-          //   setShowReplaceModal(false);
-          //   setVideoToAdd(null);
-      
-          // }}
           className="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded-lg"
         >
           Replace
@@ -209,8 +217,11 @@ const VideoLibrary = ( {videos, addToQueue, fetchVideos, setVideos,
                     setShowReplaceModal={setShowReplaceModal}
                     removeFromQueue={removeFromQueue}
                     setDisplayAlreadyInQueue={setDisplayAlreadyInQueue}
+               
+                    setDisplayDeleteModal={setDisplayDeleteModal}
+                    setVideoToDelete={setVideoToDelete}
                     />
-                ))};
+                ))}
             </div>
             )}
         </div> 

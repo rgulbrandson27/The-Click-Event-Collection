@@ -4,6 +4,7 @@ import tv from '../assets/tv.svg'
 import circletag from '../assets/circletag.svg'
 import playbutton from '../assets/playbutton.svg'
 import queueicon from '../assets/queueicon.svg'
+import trashcan from '../assets/trashcan.svg'
 
 const VideoInfoCard = ( {
     video, 
@@ -25,11 +26,11 @@ const VideoInfoCard = ( {
     extractVideoId,
     calculateVideoDuration,
     handleWatchVideo,
-    fadeOut, 
-    setFadeOut,
     addToQueue,
     handleViewKeywords,
-    videosInQueue, videoToAdd, setVideoToAdd, setShowReplaceModal, setDisplayAlreadyInQueue,
+    deleteVideo,
+    handleDeleteVideo,
+    videosInQueue, setDisplayDeleteModal, setVideoToAdd, setShowReplaceModal, setDisplayAlreadyInQueue, setVideoToDelete
     } ) => {
       console.log("VIDEOS:", videosInQueue);
         const videoEmbeddedNumber = extractVideoId(videoLink); 
@@ -55,6 +56,11 @@ const VideoInfoCard = ( {
       }
         addToQueue(video); 
     };
+
+    handleDeleteVideo = (video) => {
+        setVideoToDelete(video);
+        setDisplayDeleteModal(true);
+    }
 
     return (
       <>
@@ -99,17 +105,28 @@ const VideoInfoCard = ( {
                 </div>
               </div>
                 <div className="w-2/5 h-full flex flex-col">
-                <div className="ml-5">
-                <img
+                  <div className="ml-5">
+                    <img
                       src={thumbnailUrl} 
                       alt="YouTube Thumbnail"
                       className="w-full shadow-xl aspect-video object-cover rounded-lg mt-2"
                     /> 
                     <p className="text-gray-600 text-center mt-4 tracking-wider">{videoLength}</p>
-                </div>
+                    
+                    <div className="relative flex justify-self-center mt-2 hover:scale-105 opacity-25 place-items-center hover:opacity-50 cursor-pointer w-7 h-7"
+                      onClick={()=> handleDeleteVideo(video)}
+                      >
+                        <img className="absolute w-full h-full" src={trashcan} alt="trash icon" />
+                      <div className="absolute rounded-full ml-2 mt-1 w-1/2 -z-10 h-[70%] hover:red-400 justify-center"></div>
+
+                      {/* ml-[106px]  */}
+                          
+                    </div>
+                  </div>
+                  </div>
                 </div>
             </div>
-          </div>
+          
       </>
     )
   }
