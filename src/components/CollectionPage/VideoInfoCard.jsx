@@ -1,10 +1,10 @@
 
 import React, { useState, useEffect } from 'react'
-import tv from '../assets/tv.svg'
-import circletag from '../assets/circletag.svg'
-import playbutton from '../assets/playbutton.svg'
-import queueicon from '../assets/queueicon.svg'
-import trashcan from '../assets/trashcan.svg'
+import tv from '../../assets/svg_images/tv.svg'
+import circletag from '../../assets/svg_images/circletag.svg'
+import playbutton from '../../assets/svg_images/playbutton.svg'
+import queueicon from '../../assets/svg_images/queueicon.svg'
+import trashcan from '../../assets/svg_images/trashcan.svg'
 
 const VideoInfoCard = ( {
     video, 

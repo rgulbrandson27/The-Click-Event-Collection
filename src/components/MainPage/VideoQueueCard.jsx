@@ -1,9 +1,16 @@
 import React, { useState } from 'react'
 import {useDrag, useDrop } from 'react-dnd'
-import remove from '../assets/remove.png'
+import remove from '../../assets/png_images/remove.png'
 import { ExclamationTriangleIcon } from '@heroicons/react/24/outline'
 
-const VideoQueueCard = ( { video, fadeOut, setFadeOut, removeFromQueue, index, moveCard, updateVideoQueue, applyCategoryColor, extractVideoId, calculateVideoDuration, videosInQueue  }) => {
+const VideoQueueCard = ({ 
+  video, 
+  removeFromQueue, 
+  index, moveCard, 
+  applyCategoryColor, 
+  extractVideoId, 
+  calculateVideoDuration,
+}) => {
 
   const [isRemoving, setIsRemoving] = useState(false);
   const videoNum = extractVideoId(video.videoLink); 
@@ -77,45 +84,3 @@ const VideoQueueCard = ( { video, fadeOut, setFadeOut, removeFromQueue, index, m
         )
       }
 export default VideoQueueCard;
-
-
- //   end: (_, monitor) => {
-  //     if (monitor.didDrop()) {
-  //       updateVideoQueue(videosInQueue);
-  //     }
-  //   }
-  // });
-  
-  //   end: (_, monitor) => {
-  //     if (monitor.didDrop()) {
-  //       updateVideoQueue(videosInQueue);
-  //     }
-  //   }
-  // });
-
-  // const [ {isOver}, drop ] = useDrop({
-  //   accept: 'VIDEO',
-  //   hover: (item, monitor) => {
-  //     // if (!monitor.isDragging()) return;
-  //     if (item.index !== index) {
-  //       moveCard(item.index, index);  
-  //       item.index = index;  
-  //     }
-  //   },
-  //   collect: (monitor) => ({
-  //     isOver: monitor.isOver(),
-  //   }),
-  // });
-  // const [ {isOver}, drop ] = useDrop({
-  //   accept: 'VIDEO',
-  //   hover: (item, monitor) => {
-  //     // if (!monitor.isDragging()) return;
-  //     if (item.index !== index) {
-  //       moveCard(item.index, index);  
-  //       item.index = index;  
-  //     }
-  //   },
-  //   collect: (monitor) => ({
-  //     isOver: monitor.isOver(),
-  //   }),
-  // });

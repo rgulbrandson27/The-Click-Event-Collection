@@ -1,5 +1,5 @@
 import React from "react";
-import YouTubeVideo from './YouTubeVideo'
+import YouTubeVideo from '../MainPage/YouTubeVideo'
 
 const VideoContainer = ( {currentVideo, extractVideoId}
 ) => {

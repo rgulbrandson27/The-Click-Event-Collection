@@ -5,7 +5,6 @@ import { ChevronDownIcon } from '@heroicons/react/16/solid'
 import TimerInput from './TimerInput';
 import CategoryDropDown from './CategoryDropDown';
 
-
 const AddVideoForm = ({ setDisplayAddVideoForm, setVideos, videos, url }) => {
 
     const [newVideoTitle, setNewVideoTitle] = useState("");
@@ -36,16 +35,7 @@ const AddVideoForm = ({ setDisplayAddVideoForm, setVideos, videos, url }) => {
         isWatched: undefined,
         category: newCategory,
       };
-
-      // console.log("New Video (pre-filter):", newVideo)
-
-      // const filteredVideo = Object.fromEntries(
-      //   Object.entries(newVideo).filter(([_, value]) => value !== undefined)
-      // );
     
-      // console.log("Post-filter new video:", filteredVideo);
-    
-
       try {
         const response = await fetch(url, {
           method: "POST",
@@ -144,8 +134,6 @@ const handleAddToQueue = async (video) => {
   }
 };
 
-
-
       return (
         <>
         <form className="overflow-y-scroll border-4 border-yellow-400 h-full w-full p-4 rounded-lg bg-white showdow-md px-8 pt-6 pb-8 mb-4"
@@ -167,14 +155,6 @@ const handleAddToQueue = async (video) => {
               <CategoryDropDown   
                   setNewCategory = {setNewCategory}
               />
-                {/* // onCategorySelect={handleCategorySelect} 
-                // onChange={(e) => setNewCategory(e.target.value)}
-                // {newCategory && ( */}
-                {/* //   <div className="mt-4 text-white">
-                //     <p>Selected Category: {newCategory} </p> */}
-         
-                
-
                 
             </div>
           <input className="shadow appearance-none border rounded w-full py-2 mb-6 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline mt-4" 
@@ -233,8 +213,7 @@ const handleAddToQueue = async (video) => {
     <input id="newKeyword" type="text" placeholder="Add Key Words or Phrases"
         className="shadow appearance-none border rounded w-full py-2 px-3 ml-2 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
         value={newKeyword}
-        /* value={newKeywords.join(", ")}
-          onChange={(e) => setNewKeywords(e.target.value.split(",").map((kw) => kw.trim()))} */
+    
         onChange={(e) => setNewKeyword(e.target.value)}>
     </input>
 
@@ -267,29 +246,6 @@ const handleAddToQueue = async (video) => {
       </div>
     </div>
   
-
-  {/* <div id="newKeywordList" className="flex flex-wrap mt-3 gap-1 p-2 border rounded-md bg-gray-50">
-  </div>
-
-</div> */}
-        {/* // const input = document.getElementById('keywords');
-        // const keywordList = document.getElementById('keyword-list');
-        // if (input.value.trim() !== '') 
-        //   const listItem = document.createElement('span');
-        //   listItem.textContent = input.value.trim();
-        //   listItem.className =
-        //     'inline-flex items-center bg-gray-200 text-gray-700 px-2 py-1 rounded-full text-sm mr-2 mt-1';
-        //   const removeBtn = document.createElement('button');
-        //   removeBtn.textContent = 'x';
-        //   removeBtn.className = 'ml-2 text-red-500';
-        //   removeBtn.onclick = () => listItem.remove();
-        //   listItem.appendChild(removeBtn);
-        //   keywordList.appendChild(listItem);
-        //   input.value = '';
-      //   }
-      // }} */}
-  
-
 {/* Buttons Section----------------*/}
 
           <div className="mt-6 flex items-center justify-end gap-x-8">

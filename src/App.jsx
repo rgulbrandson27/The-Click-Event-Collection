@@ -1,11 +1,10 @@
 import React, { useState, useEffect } from 'react'
 import useWindowSize from './useWindowSize';
-import Title from './components/Title';
-import SearchBar from './components/SearchBar';
-import QueueSection from './components/QueueSection';
-import VideoContainer from './components/VideoContainer';
-import VideoLibrary from './components/VideoLibrary';
-
+import Title from './components/MainPage/Title';
+import SearchBar from './components/MainPage/SearchBar';
+import QueueSection from './components/MainPage/QueueSection';
+import VideoContainer from './components/CollectionPage/VideoContainer';
+import VideoLibrary from './components/CollectionPage/VideoLibrary';
 
 const url = "https://663eca0fe3a7c3218a4b60b3.mockapi.io/videoTutorials";
 
@@ -14,13 +13,15 @@ const App = () => {
   const [videos, setVideos] = useState([]);
   const [displayVideoLibrary, setDisplayVideoLibrary] = useState(false);
   const [tailwindSize, setTailwindSize] = useState('');
-  const [currentVideo, setCurrentVideo] = useState('');
+  const [currentVideo, setCurrentVideo] = useState("");
   const [displayKeywords, setDisplayKeywords] = useState(false);
   const [videosInQueue, setVideosInQueue] = useState([]);
   const [displayColorKey, setDisplayColorKey] = useState(false);
   const [queueOverride, setQueueOverride] = useState(false);
   const [displayAlreadyInQueueModal, setdisplayAlreadyInQueueModal] = useState(false);
   const [videoToDelete, setVideoToDelete] = useState(null);
+  const [userUpdatedQueue, setUserUpdatedQueue] = useState(false);
+
 
   useEffect(() => {
     fetchVideos(); 
@@ -64,6 +65,7 @@ const App = () => {
           if (!removeResponse.ok) throw new Error('Failed to remove video from queue');
       
           setVideosInQueue((prevQueue) => {
+            setUserUpdatedQueue(true);
             const updatedQueue = prevQueue
               .map((video) =>
                 video.id === videoId ? { ...video, numberInQueue: 0 } : video
@@ -106,6 +108,7 @@ const App = () => {
 
     if (!response.ok) throw new Error('Failed to add video to queue');
     setDisplayVideoLibrary(false);
+    setUserUpdatedQueue(true);
     setVideosInQueue((prevQueue) => [
       ...prevQueue,
       { ...video, numberInQueue: newPosition },
@@ -164,8 +167,20 @@ const App = () => {
     }
   };
 
+// useEffect(() => {
+//   if (videosInQueue.length > 0 && !queueOverride && !currentVideo) {
+//     console.log("Setting default video to first in queue");
+//     setTimeout(() => {
+//       console.log("timeout")
+//       console.log(videosInQueue);
+//       setCurrentVideo((videosInQueue[0]));
+//       // console.log(currentVideo);
+//     }, 0); // Delay to next tick
+//   }
+// }, [videosInQueue, queueOverride, currentVideo]);
 
   const deleteVideo = async (videoId) => {
+    console.trace("deleteVideo called with", videoId); 
     try {
       // Make a DELETE request to the backend
       const response = await fetch(`${url}/${videoToDelete.id}`, {
@@ -280,28 +295,114 @@ const calculateVideoDuration = (startTime, endTime) => {
   const handleQueueUpdate = (newOrder) => {
     setVideosInQueue(newOrder); // Update the local state with the new order
     updateVideoQueue(newOrder);  // Send the updated order to the backend
+    setUserUpdatedQueue(true);
   };
 
 
-  const handleWatchVideo = (video) => {
-    setCurrentVideo(video);
-    setDisplayVideoLibrary(false);
-    setQueueOverride(true)
-  };
 
-  const displayDefaultVideo = (videosInQueue) => {
-    if (videosInQueue?.length > 0 && !queueOverride) {
-      const defaultVideo = videosInQueue[0];
-      setCurrentVideo(defaultVideo)
-      setQueueOverride(false);
+// When user clicks "Watch Video":
+const handleWatchVideo = (video) => {
+  setCurrentVideo(video);
+  setQueueOverride(true);
+  setDisplayVideoLibrary(false);
+};
+
+// const handleWatchVideo = (video) => {
+//   setQueueOverride(true);
+//   setTimeout(() => {
+//     setCurrentVideo(video);
+//   }, 0);
+//   setDisplayVideoLibrary(false);
+// };
+
+// useEffect(() => {
+//   if (videosInQueue.length > 0 && !queueOverride && !currentVideo) {
+//     setCurrentVideo(videosInQueue[0]);
+//   }
+// }, [videosInQueue, queueOverride, currentVideo]);
+
+
+// useEffect(() => {
+//   if (videosInQueue.length === 0) {
+//     setCurrentVideo(null);
+//     setQueueOverride(false);
+//     return;
+//   }
+
+//   if (!queueOverride) {
+//     // No manual override, always show first video in queue
+//     setCurrentVideo(videosInQueue[0]);
+//   } else {
+//     // Manual override active
+//     const stillInQueue = videosInQueue.some(v => v.id === currentVideo?.id);
+//     if (!stillInQueue) {
+//       // Manual video removed: reset override and show first in queue
+//       setQueueOverride(false);
+//       setCurrentVideo(videosInQueue[0]);
+    
+    // ELSE: do nothing — keep currentVideo as is
+  
+// }, [videosInQueue, queueOverride, currentVideo]);
+
+// Single useEffect to handle default video and overrides:
+// useEffect(() => {
+//   if (!queueOverride && videosInQueue.length > 0) {
+//     // No manual override, show first video in queue
+//     setCurrentVideo(videosInQueue[0]);
+//   } else if (queueOverride && currentVideo) {
+//     // Manual override active - check if video is still in queue
+//     const stillInQueue = videosInQueue.some(v => v.id === currentVideo.id);
+//     if (!stillInQueue) {
+//       // If overridden video was removed from queue, reset override & default to first video
+//       setQueueOverride(false);
+//       setCurrentVideo(videosInQueue[0] || null);
+//     }
+//   }
+// }, [videosInQueue, queueOverride, currentVideo]);
+
+// useEffect(() => {
+//   if (!queueOverride && videosInQueue.length > 0) {
+//     // Auto-update to the first video in queue
+//     setCurrentVideo(videosInQueue[0]);
+//   } else if (queueOverride ) {
+//     const stillInQueue = videosInQueue.some(video => video.id === currentVideo.id);
+
+//     if (!stillInQueue) {
+//       // Override video was removed from queue
+//       setQueueOverride(false);
+//       setCurrentVideo(videosInQueue[0] || null);
+//     }
+//   }
+// }, [videosInQueue, queueOverride, currentVideo]);
+// useEffect(() => {
+//   if (!queueOverride) {
+//     if (videosInQueue.length > 0) {
+//       setCurrentVideo(videosInQueue[0]);
+//     } else {
+//       setCurrentVideo(null); // Empty screen when queue is empty
+//     }
+//   }
+//   // If queueOverride is true, do nothing — let manual selection persist
+// }, [videosInQueue, queueOverride]);
+useEffect(() => {
+  if (userUpdatedQueue) {
+    // Reset manual override and show new queue top
+    if (videosInQueue.length > 0) {
+      setCurrentVideo(videosInQueue[0]);
+    } else {
+      setCurrentVideo(null);
+    }
+    setQueueOverride(false);
+    setUserUpdatedQueue(false); // Reset the flag
+  } else if (!queueOverride) {
+    // Normal fallback behavior
+    if (videosInQueue.length > 0) {
+      setCurrentVideo(videosInQueue[0]);
+    } else {
+      setCurrentVideo(null);
     }
   }
-
-  useEffect(() => {
-    displayDefaultVideo(videosInQueue);
-  }, [videosInQueue]);
-
-
+}, [videosInQueue, queueOverride, userUpdatedQueue]);
 
   return (
     <>
@@ -347,7 +448,7 @@ const calculateVideoDuration = (startTime, endTime) => {
                   applyCategoryColor={applyCategoryColor}        
                   extractVideoId={extractVideoId} 
                   calculateVideoDuration={calculateVideoDuration}
-                  updateVideoQueue={handleQueueUpdate}
+                  updateVideoQueue={updateVideoQueue}
                   removeFromQueue={removeFromQueue}
                    />
               </div>
@@ -402,9 +503,9 @@ const calculateVideoDuration = (startTime, endTime) => {
             <div className="flex w-full mt-12">
               <div className="w-2/3 ml-12 mr-8">
                   <VideoContainer 
-                   videosInQueue={videosInQueue}
-               currentVideo={currentVideo}
-               extractVideoId={extractVideoId}
+                    videosInQueue={videosInQueue}
+                    currentVideo={currentVideo}
+                    extractVideoId={extractVideoId}
                   />
               </div>
 
@@ -432,8 +533,8 @@ const calculateVideoDuration = (startTime, endTime) => {
             <div className="flex justify-center mx-28 mt-4">
                 <VideoContainer 
              videosInQueue={videosInQueue}
-         currentVideo={currentVideo}
-         extractVideoId={extractVideoId}
+              currentVideo={currentVideo}
+              extractVideoId={extractVideoId}
                 />
             </div>
 
@@ -462,8 +563,8 @@ const calculateVideoDuration = (startTime, endTime) => {
             <div className="flex justify-center mx-12 mt-6">
                 <VideoContainer 
                   videosInQueue={videosInQueue}
-              currentVideo={currentVideo}
-              extractVideoId={extractVideoId}
+                  currentVideo={currentVideo}
+                  extractVideoId={extractVideoId}
                 />
             </div>
 
@@ -497,18 +598,15 @@ const calculateVideoDuration = (startTime, endTime) => {
                 videosInQueue={videosInQueue}
                 />
             </div>
-      
-      
                 <div className="w-full h-[40%]  px-16 mt-6">
                     
               <QueueSection  videosInQueue={videosInQueue} 
-            setVideosInQueue={setVideosInQueue} 
-            applyCategoryColor={applyCategoryColor}    
-            updateVideoQueue={handleQueueUpdate}      
-            extractVideoId={extractVideoId} 
-            calculateVideoDuration={calculateVideoDuration}
-            removeFromQueue={removeFromQueue} />
-            
+                  setVideosInQueue={setVideosInQueue} 
+                  applyCategoryColor={applyCategoryColor}    
+                  updateVideoQueue={handleQueueUpdate}      
+                  extractVideoId={extractVideoId} 
+                  calculateVideoDuration={calculateVideoDuration}
+                  removeFromQueue={removeFromQueue} />
             </div>
         </div>
         )}

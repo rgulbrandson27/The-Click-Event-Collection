@@ -1,12 +1,10 @@
 import React, { useState, useEffect } from 'react'
-// import Colors_palette from '../src/assets/Colors_palette';
-
 
 const ColorKey = ( { displayColorKey, setDisplayColorKey, handleShowColorKey } ) => {
 
     return (
       // <div className="drawer drawer-end">
-   <div className={` fixed top-20 lg:top-28 shadow-inner right-0 bg-gray-300 w-64 transform rounded-xl rounded-r-none
+   <div className={` fixed top-20 lg:top-28 shadow-inner z-10 right-0 bg-gray-300 w-64 transform rounded-xl rounded-r-none
      border-gray-600 border-l-8 ${
       displayColorKey ? 'translate-x-0' : 'translate-x-full'
     } transition-transform duration-300`}
@@ -26,7 +24,7 @@ const ColorKey = ( { displayColorKey, setDisplayColorKey, handleShowColorKey } )
             </li>
             <li className="flex items-center gap-4">
                 <div className="bg-emerald-600 rounded-full h-4 w-4"></div>
-                <div className="text-2xl">Back End - Arch</div>
+                <div className="text-2xl">Back-End - Arch</div>
             </li>
             <li className="flex items-center gap-4">
                 <div className="bg-blue-600 rounded-full h-4 w-4"></div>
@@ -38,7 +36,7 @@ const ColorKey = ( { displayColorKey, setDisplayColorKey, handleShowColorKey } )
             </li>
             <li className="flex items-center gap-4">
                 <div className="bg-fuchsia-500 rounded-full h-4 w-4"></div>
-                <div className="text-2xl">Front End - CSS</div>
+                <div className="text-2xl">Front-End - CSS</div>
             </li>
             <li className="flex items-center gap-4">
                 <div className="bg-orange-500 rounded-full h-4 w-4"></div>
