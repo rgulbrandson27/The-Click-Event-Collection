@@ -251,12 +251,12 @@ const App = () => {
       const colorKey = {
           "Artificial Intelligence": "pink-500",
           "Back End": "emerald-600",
-          "Data": "blue-600", 
+          "Data": "green-600", 
           "Data S&A": "violet-600",
           "Front End": "fuchsia-500",
           "Java": "orange-500",
           "JavaScript": "amber-400",
-          "Python": "green-500",
+          "Python": "blue-500",
           "React": "cyan-600",
           "Tailwind": "teal-400",
       };
@@ -591,7 +591,9 @@ useEffect(() => {
                 <SearchBar handleShowLibrary={handleShowLibrary}/>
             </div> 
 
-            <div className="flex justify-center px-2">
+            <div className="flex justify-center px-2"
+          
+            >
                 <VideoContainer 
                 currentVideo={currentVideo}
                 extractVideoId={extractVideoId}

@@ -20,11 +20,11 @@ const ColorKey = ( { displayColorKey, setDisplayColorKey, handleShowColorKey } )
           <ul className="bg-base-200 text-base-content px-6 py-4">
             <li className="flex items-center gap-4">
                 <div className="bg-pink-500 rounded-full h-4 w-4"></div>
-                <div className="text-lg">Artificial Intelligence</div>
+                <div className="text-2xl">AI</div>
             </li>
             <li className="flex items-center gap-4">
                 <div className="bg-emerald-600 rounded-full h-4 w-4"></div>
-                <div className="text-2xl">Back-End - Arch</div>
+                <div className="text-2xl">Back-End</div>
             </li>
             <li className="flex items-center gap-4">
                 <div className="bg-blue-600 rounded-full h-4 w-4"></div>
@@ -36,7 +36,7 @@ const ColorKey = ( { displayColorKey, setDisplayColorKey, handleShowColorKey } )
             </li>
             <li className="flex items-center gap-4">
                 <div className="bg-fuchsia-500 rounded-full h-4 w-4"></div>
-                <div className="text-2xl">Front-End - CSS</div>
+                <div className="text-2xl">Front-End</div>
             </li>
             <li className="flex items-center gap-4">
                 <div className="bg-orange-500 rounded-full h-4 w-4"></div>

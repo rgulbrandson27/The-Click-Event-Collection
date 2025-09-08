@@ -92,10 +92,11 @@ const VideoLibrary = ( {videos, addToQueue, fetchVideos, setVideos,
         )}
 
       {displayDeleteModal && (
-          <div className="fixed inset-0 bg-gray-800 -mt-32 flex items-center place-self-center justify-center z-50 w-[400px] h-[280px] p-2 rounded-xl">
+          <div className="fixed inset-0 bg-gray-800 -mt-32 flex items-center place-self-center justify-center z-50 w-[400px] h-[320px] p-2 rounded-xl">
             <div className="bg-white rounded-xl shadow-xl px-3 p-2 pt-5 text-center h-full">
                 <h2 className="mx-2 text-2xl font-bold text-gray-800 mt-2">Are you sure you want to delete this video?</h2>
                 <h3 className="mx-2 text-xl font-bold text-red-800 mt-4 mb-7">All content will be deleted.</h3> 
+                <div className="flex flex-col items-center">
                 <button className="bg-gray-200 hover:bg-red-800 text-red-800 text-lg border-solid border-red-800 border-4 hover:text-white mb-2 font-bold py-2 px-4 rounded-lg"
                  onClick={() => {
                   deleteVideo(videoToDelete);
@@ -104,6 +105,14 @@ const VideoLibrary = ( {videos, addToQueue, fetchVideos, setVideos,
               >
               Confirm Delete
             </button>
+                <button className="bg-gray-200 hover:bg-red-800 text-red-800 text-md border-solid border-red-800 border-4 hover:text-white mb-2 font-bold py-2 px-4 mt-3 rounded-lg"
+                 onClick={() => {
+                  setDisplayDeleteModal(false);
+                 }}
+              >
+              Cancel
+            </button>
+            </div>
           </div>
           </div>
         )}
